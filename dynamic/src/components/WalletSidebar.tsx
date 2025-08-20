@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount } from "wagmi";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useGlobalWallet } from "@/hooks/useGlobalWallet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,9 +9,11 @@ import { useState } from "react";
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 
 export function WalletSidebar() {
-  const { address, isConnected, chain } = useAccount();
-  const { accountAddress, portfolio } = useGlobalWallet();
+  const { setShowAuthFlow, primaryWallet } = useDynamicContext();
+  const { accountAddress, portfolio, address } = useGlobalWallet();
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
+  
+  const isConnected = !!primaryWallet;
 
   const copyToClipboard = async (text: string, label: string) => {
     try {
@@ -46,9 +48,9 @@ export function WalletSidebar() {
                 Connected
               </span>
             </div>
-            {chain && (
+            {primaryWallet?.connector?.name && (
               <Badge variant="outline" className="text-xs">
-                {chain.name}
+                {primaryWallet.connector.name}
               </Badge>
             )}
           </div>

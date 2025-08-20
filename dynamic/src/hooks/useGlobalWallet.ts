@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useAccount, useWalletClient } from "wagmi";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { isEthereumWallet } from '@dynamic-labs/ethereum';
 import { createRhinestoneAccount } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
 
@@ -32,8 +33,7 @@ export interface GlobalWalletState {
 }
 
 export function useGlobalWallet() {
-  const { address, isConnected } = useAccount();
-  const { data: walletClient } = useWalletClient();
+  const { primaryWallet } = useDynamicContext();
   const [state, setState] = useState<GlobalWalletState>({
     rhinestoneAccount: null,
     accountAddress: null,
@@ -41,6 +41,11 @@ export function useGlobalWallet() {
     isLoading: false,
     error: null,
   });
+
+  // Memoize the wallet address to use as a stable dependency
+  const walletAddress = useMemo(() => {
+    return primaryWallet?.address;
+  }, [primaryWallet?.address]);
 
   const getChainName = (chainId: number): string => {
     const chainNames: { [key: number]: string } = {
@@ -161,66 +166,10 @@ export function useGlobalWallet() {
         }));
       }
     },
-    [state.rhinestoneAccount]
+    [] // Remove the dependency to prevent infinite loops
   );
 
-  const initializeRhinestoneAccount = useCallback(async () => {
-    if (!isConnected || !address || !walletClient) {
-      setState((prev) => ({
-        ...prev,
-        rhinestoneAccount: null,
-        accountAddress: null,
-        portfolio: [],
-        error: null,
-      }));
-      return;
-    }
 
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
-
-    try {
-      const apiKey = process.env.NEXT_PUBLIC_RHINESTONE_API_KEY;
-
-      if (!apiKey) {
-        throw new Error(
-          "Rhinestone API key not configured. Please set NEXT_PUBLIC_RHINESTONE_API_KEY"
-        );
-      }
-
-      const walletClientWithAddress = {
-        ...walletClient,
-        address: address,
-      };
-
-      // Use the connected wallet client
-      const rhinestoneAccount = await createRhinestoneAccount({
-        owners: {
-          type: "ecdsa",
-          accounts: [walletClientWithAddress as any],
-        },
-        rhinestoneApiKey: apiKey,
-      });
-
-      const accountAddress = rhinestoneAccount.getAddress();
-
-      setState((prev) => ({
-        ...prev,
-        rhinestoneAccount,
-        accountAddress,
-        isLoading: false,
-      }));
-    } catch (error) {
-      console.error("Failed to initialize Rhinestone account:", error);
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to initialize account",
-      }));
-    }
-  }, [isConnected, address, walletClient]);
 
   const sendCrossChainTransaction = useCallback(
     async (
@@ -257,7 +206,11 @@ export function useGlobalWallet() {
         }
 
         // Refresh portfolio after transaction
-        await fetchPortfolio();
+        try {
+          await fetchPortfolio();
+        } catch (portfolioError) {
+          console.warn("Failed to refresh portfolio after transaction:", portfolioError);
+        }
 
         return {
           transaction,
@@ -269,22 +222,90 @@ export function useGlobalWallet() {
         throw error;
       }
     },
-    [state.rhinestoneAccount, fetchPortfolio]
+    [state.rhinestoneAccount] // Remove fetchPortfolio from dependencies
   );
 
   useEffect(() => {
-    initializeRhinestoneAccount();
-  }, [initializeRhinestoneAccount]);
+    let isMounted = true;
 
-  // Fetch portfolio when rhinestone account is available
-  useEffect(() => {
-    if (state.rhinestoneAccount) {
-      fetchPortfolio();
+    async function initializeAccount() {
+      if (!primaryWallet || !isEthereumWallet(primaryWallet) || !walletAddress) {
+        setState((prev) => ({
+          ...prev,
+          rhinestoneAccount: null,
+          accountAddress: null,
+          portfolio: [],
+          error: null,
+        }));
+        return;
+      }
+
+      try {
+        setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+        // Get the wallet client asynchronously
+        const walletClient = await primaryWallet.getWalletClient();
+        
+        if (!isMounted) return;
+
+        // Dynamic sometimes needs address explicitly added to the client
+        const walletClientWithAddress = {
+          ...walletClient,
+          address: walletAddress,
+        };
+
+        // Pass the wallet client (from Dynamic) to Rhinestone
+        // Rhinestone wraps it with cross-chain transaction capabilities
+        const account = await createRhinestoneAccount({
+          owners: {
+            type: "ecdsa",
+            accounts: [walletClientWithAddress as any], // client from Dynamic
+          },
+          rhinestoneApiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
+        });
+
+        if (isMounted && account) {
+          console.log("Rhinestone account created:", account);
+          setState((prev) => ({
+            ...prev,
+            rhinestoneAccount: account,
+            accountAddress: walletAddress, // Use the wallet address directly
+            isLoading: false,
+          }));
+          
+          // Fetch portfolio after account is set - but handle errors gracefully
+          try {
+            await fetchPortfolio(account);
+          } catch (portfolioError) {
+            console.warn("Failed to fetch initial portfolio:", portfolioError);
+            // Don't fail the whole initialization if portfolio fetch fails
+          }
+        }
+      } catch (error) {
+        console.error('Failed to create Rhinestone account:', error);
+        if (isMounted) {
+          setState((prev) => ({
+            ...prev,
+            rhinestoneAccount: null,
+            accountAddress: null,
+            isLoading: false,
+            error: error instanceof Error ? error.message : 'Failed to initialize account',
+          }));
+        }
+      }
     }
-  }, [state.rhinestoneAccount, fetchPortfolio]);
+
+    initializeAccount();
+
+    // Cleanup function to prevent setting state on unmounted component
+    return () => {
+      isMounted = false;
+    };
+  }, [primaryWallet, walletAddress]); // Remove fetchPortfolio from dependencies
 
   return {
     ...state,
+    address: walletAddress,
     refreshPortfolio: () => fetchPortfolio(),
     sendCrossChainTransaction,
   };

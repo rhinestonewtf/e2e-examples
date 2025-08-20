@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useGlobalWallet } from "@/hooks/useGlobalWallet";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,13 +17,15 @@ const USDC_ADDRESSES: { [chainId: number]: string } = {
 };
 
 export function MainContent() {
-  const { isConnected } = useAccount();
+  const { primaryWallet } = useDynamicContext();
   const {
     sendCrossChainTransaction,
     portfolio,
     accountAddress,
     refreshPortfolio,
   } = useGlobalWallet();
+  
+  const isConnected = !!primaryWallet;
   const [isTransacting, setIsTransacting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
