@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { useAccount, useWalletClient } from "wagmi";
 import { createRhinestoneAccount } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
+import { useSSRSafeWallet } from "./useSSRSafeWallet";
+import { isServer } from "../utils/isServer";
 
 export interface TokenBalance {
   symbol: string;
@@ -30,8 +31,9 @@ export interface GlobalWalletState {
 }
 
 export function useGlobalWallet() {
-  const { address, isConnected } = useAccount();
-  const { data: walletClient } = useWalletClient();
+  // Use SSR-safe wallet hooks
+  const { address, isConnected, walletClient, isHydrated } = useSSRSafeWallet();
+  
   const [state, setState] = useState<GlobalWalletState>({
     rhinestoneAccount: null,
     accountAddress: null,
@@ -39,6 +41,17 @@ export function useGlobalWallet() {
     isLoading: false,
     error: null,
   });
+
+  // Don't initialize anything on server
+  if (isServer) {
+    return {
+      ...state,
+      refreshPortfolio: () => Promise.resolve(),
+      sendCrossChainTransaction: async () => {
+        throw new Error("Transactions not available on server");
+      },
+    };
+  }
 
   const getChainName = (chainId: number): string => {
     const chainNames: { [key: number]: string } = {
@@ -163,7 +176,8 @@ export function useGlobalWallet() {
   );
 
   const initializeRhinestoneAccount = useCallback(async () => {
-    if (!isConnected || !address || !walletClient) {
+    // Don't initialize if not hydrated yet or missing wallet data
+    if (!isHydrated || !isConnected || !address || !walletClient) {
       setState((prev) => ({
         ...prev,
         rhinestoneAccount: null,
@@ -218,7 +232,7 @@ export function useGlobalWallet() {
             : "Failed to initialize account",
       }));
     }
-  }, [isConnected, address, walletClient]);
+  }, [isHydrated, isConnected, address, walletClient]);
 
   const sendCrossChainTransaction = useCallback(
     async (
