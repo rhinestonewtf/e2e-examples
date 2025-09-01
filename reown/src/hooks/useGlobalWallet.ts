@@ -2,7 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAccount, useWalletClient } from "wagmi";
-import { createRhinestoneAccount } from "@rhinestone/sdk";
+import {
+  createRhinestoneAccount,
+  walletClientToAccount,
+} from "@rhinestone/sdk";
 import { formatUnits } from "viem";
 
 export interface TokenBalance {
@@ -187,16 +190,14 @@ export function useGlobalWallet() {
         );
       }
 
-      const walletClientWithAddress = {
-        ...walletClient,
-        address: address,
-      };
+      // wrap the wagmi client for the sdk
+      const account = walletClientToAccount(walletClient);
 
-      // Use the connected wallet client
+      // use the wallet client (from Reown) to create a Rhinestone account
       const rhinestoneAccount = await createRhinestoneAccount({
         owners: {
           type: "ecdsa",
-          accounts: [walletClientWithAddress as any],
+          accounts: [account],
         },
         rhinestoneApiKey: apiKey,
       });

@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { isEthereumWallet } from '@dynamic-labs/ethereum';
-import { createRhinestoneAccount } from "@rhinestone/sdk";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { isEthereumWallet } from "@dynamic-labs/ethereum";
+import {
+  createRhinestoneAccount,
+  walletClientToAccount,
+} from "@rhinestone/sdk";
 import { formatUnits } from "viem";
 
 export interface TokenBalance {
@@ -169,8 +172,6 @@ export function useGlobalWallet() {
     [] // Remove the dependency to prevent infinite loops
   );
 
-
-
   const sendCrossChainTransaction = useCallback(
     async (
       sourceChains: any[],
@@ -209,7 +210,10 @@ export function useGlobalWallet() {
         try {
           await fetchPortfolio();
         } catch (portfolioError) {
-          console.warn("Failed to refresh portfolio after transaction:", portfolioError);
+          console.warn(
+            "Failed to refresh portfolio after transaction:",
+            portfolioError
+          );
         }
 
         return {
@@ -229,7 +233,11 @@ export function useGlobalWallet() {
     let isMounted = true;
 
     async function initializeAccount() {
-      if (!primaryWallet || !isEthereumWallet(primaryWallet) || !walletAddress) {
+      if (
+        !primaryWallet ||
+        !isEthereumWallet(primaryWallet) ||
+        !walletAddress
+      ) {
         setState((prev) => ({
           ...prev,
           rhinestoneAccount: null,
@@ -245,21 +253,17 @@ export function useGlobalWallet() {
 
         // Get the wallet client asynchronously
         const walletClient = await primaryWallet.getWalletClient();
-        
+
         if (!isMounted) return;
 
-        // Dynamic sometimes needs address explicitly added to the client
-        const walletClientWithAddress = {
-          ...walletClient,
-          address: walletAddress,
-        };
+        // wrap the wagmi client for the sdk
+        const wrappedWalletClient = walletClientToAccount(walletClient);
 
-        // Pass the wallet client (from Dynamic) to Rhinestone
-        // Rhinestone wraps it with cross-chain transaction capabilities
+        // use the wallet client (from Dynamic) to create a Rhinestone account
         const account = await createRhinestoneAccount({
           owners: {
             type: "ecdsa",
-            accounts: [walletClientWithAddress as any], // client from Dynamic
+            accounts: [wrappedWalletClient],
           },
           rhinestoneApiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
         });
@@ -269,10 +273,10 @@ export function useGlobalWallet() {
           setState((prev) => ({
             ...prev,
             rhinestoneAccount: account,
-            accountAddress: walletAddress, // Use the wallet address directly
+            accountAddress: walletAddress,
             isLoading: false,
           }));
-          
+
           // Fetch portfolio after account is set - but handle errors gracefully
           try {
             await fetchPortfolio(account);
@@ -282,14 +286,17 @@ export function useGlobalWallet() {
           }
         }
       } catch (error) {
-        console.error('Failed to create Rhinestone account:', error);
+        console.error("Failed to create Rhinestone account:", error);
         if (isMounted) {
           setState((prev) => ({
             ...prev,
             rhinestoneAccount: null,
             accountAddress: null,
             isLoading: false,
-            error: error instanceof Error ? error.message : 'Failed to initialize account',
+            error:
+              error instanceof Error
+                ? error.message
+                : "Failed to initialize account",
           }));
         }
       }

@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useMagic } from "./MagicProvider";
-import { createRhinestoneAccount } from "@rhinestone/sdk";
-import { formatUnits, createWalletClient, custom, type WalletClient } from "viem";
-import { getChainId, getNetworkUrl } from "@/utils/network";
+import {
+  createRhinestoneAccount,
+  walletClientToAccount,
+} from "@rhinestone/sdk";
+import { formatUnits, createWalletClient, custom } from "viem";
 
 export interface TokenBalance {
   symbol: string;
@@ -196,7 +198,7 @@ export function useRhinestoneWallet() {
         return;
       }
 
-      // Get user's Magic wallet address  
+      // Get user's Magic wallet address
       const userInfo = await magic.user.getInfo();
       const magicAddress = userInfo.publicAddress;
 
@@ -218,26 +220,23 @@ export function useRhinestoneWallet() {
         transport: custom(magic.rpcProvider as any),
       });
 
-      // Ensure the wallet client has the address property for Rhinestone
-      const walletClientWithAddress = {
-        ...walletClient,
-        address: magicAddress as `0x${string}`,
-      };
+      // wrap the wagmi client for the sdk
+      const wrappedWalletClient = walletClientToAccount(walletClient);
 
-      // Create Rhinestone account using Magic wallet client
-      const rhinestoneAccount = await createRhinestoneAccount({
+      // use the wallet client (from Dynamic) to create a Rhinestone account
+      const account = await createRhinestoneAccount({
         owners: {
           type: "ecdsa",
-          accounts: [walletClientWithAddress as any],
+          accounts: [wrappedWalletClient],
         },
         rhinestoneApiKey: apiKey,
       });
 
-      const accountAddress = rhinestoneAccount.getAddress();
+      const accountAddress = account.getAddress();
 
       setState((prev) => ({
         ...prev,
-        rhinestoneAccount,
+        rhinestoneAccount: account,
         accountAddress,
         magicAddress,
         isLoading: false,

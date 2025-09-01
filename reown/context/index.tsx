@@ -33,7 +33,7 @@ const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
   networks: [mainnet, arbitrum, base, polygon, optimism],
-  defaultNetwork: mainnet,
+  defaultNetwork: arbitrum,
   metadata: metadata,
   themeMode: "light",
   themeVariables: {
