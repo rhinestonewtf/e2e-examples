@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { useGlobalWallet } from "@/hooks/useGlobalWallet";
+import { base, arbitrum } from "wagmi/chains";
+import { encodeFunctionData, erc20Abi } from "viem";
+import { getTokenAddress } from "@rhinestone/sdk";
 
 export function MainContent() {
-  const { portfolio, accountAddress, sendCrossChainTransaction } = useGlobalWallet();
+  const { portfolio, accountAddress, sendCrossChainTransaction } =
+    useGlobalWallet();
   const [isTransactionLoading, setIsTransactionLoading] = useState(false);
-  const [transactionResult, setTransactionResult] = useState<string | null>(null);
+  const [transactionResult, setTransactionResult] = useState<string | null>(
+    null
+  );
 
   const handleTestTransaction = async () => {
     if (!accountAddress) {
@@ -16,13 +22,31 @@ export function MainContent() {
     setTransactionResult(null);
 
     try {
-      // Example cross-chain transaction - you can modify this based on your needs
-      const result = await sendCrossChainTransaction(
-        [1], // Source chains (Ethereum)
-        42161, // Target chain (Arbitrum)
-        [], // Calls
-        [] // Token requests
-      );
+      const usdcAmount = 1000n;
+      const target = accountAddress as `0x${string}`;
+
+      const arbitrumUsdcAddress = getTokenAddress("USDC", arbitrum.id);
+      const result = await sendCrossChainTransaction({
+        sourceChains: [base],
+        targetChain: arbitrum,
+        calls: [
+          {
+            to: arbitrumUsdcAddress,
+            value: 0n,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "transfer",
+              args: [target, usdcAmount],
+            }),
+          },
+        ],
+        tokenRequests: [
+          {
+            address: arbitrumUsdcAddress,
+            amount: usdcAmount.toString(),
+          },
+        ],
+      });
 
       setTransactionResult(
         result.fillTransactionHash || "Transaction completed successfully"
@@ -97,10 +121,16 @@ export function MainContent() {
                     Portfolio Value
                   </h3>
                   <div className="text-2xl font-bold text-slate-900">
-                    {portfolio.length} Token{portfolio.length !== 1 ? 's' : ''}
+                    {portfolio.length} Token{portfolio.length !== 1 ? "s" : ""}
                   </div>
                   <p className="text-sm text-slate-500">
-                    Across {new Set(portfolio.flatMap(t => t.chains.map(c => c.chainId))).size} chains
+                    Across{" "}
+                    {
+                      new Set(
+                        portfolio.flatMap((t) => t.chains.map((c) => c.chainId))
+                      ).size
+                    }{" "}
+                    chains
                   </p>
                 </div>
               </div>
@@ -114,7 +144,10 @@ export function MainContent() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {portfolio.map((token) => (
-                    <div key={token.symbol} className="p-4 bg-slate-50 rounded-lg">
+                    <div
+                      key={token.symbol}
+                      className="p-4 bg-slate-50 rounded-lg"
+                    >
                       <div className="flex justify-between items-center mb-3">
                         <h3 className="font-semibold text-slate-900">
                           {token.symbol}
@@ -125,7 +158,8 @@ export function MainContent() {
                       </div>
                       <div className="space-y-1">
                         <div className="text-xs text-slate-600">
-                          Available: {parseFloat(token.unlockedBalance).toFixed(4)}
+                          Available:{" "}
+                          {parseFloat(token.unlockedBalance).toFixed(4)}
                         </div>
                         {parseFloat(token.lockedBalance) > 0 && (
                           <div className="text-xs text-slate-600">
@@ -133,7 +167,8 @@ export function MainContent() {
                           </div>
                         )}
                         <div className="text-xs text-slate-500">
-                          On {token.chains.length} chain{token.chains.length !== 1 ? 's' : ''}
+                          On {token.chains.length} chain
+                          {token.chains.length !== 1 ? "s" : ""}
                         </div>
                       </div>
                     </div>
@@ -159,7 +194,7 @@ export function MainContent() {
                       Processing Transaction...
                     </>
                   ) : (
-                    "Test Cross-Chain Transaction"
+                    "Transfer 0.01 USDC: Base → Arbitrum"
                   )}
                 </button>
 

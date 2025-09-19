@@ -2469,13 +2469,19 @@
     valtio "1.13.2"
     viem ">=2.29.0"
 
-"@rhinestone/sdk@^1.0.0-alpha.17":
-  version "1.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@rhinestone/sdk/-/sdk-1.0.0-alpha.17.tgz#94bb34642d447a9b4532e0c09513396972de3d89"
-  integrity sha512-y9Q8n4MBzRtRd+BBTNTnGSp9xQiIugcWKGT3v6ICNX/9wZF9J38Q6SJs3gJH9w42WnXDoWcivegE0aI44MZtWA==
+"@rhinestone/sdk@^1.0.0-alpha.32":
+  version "1.0.0-alpha.32"
+  resolved "https://registry.yarnpkg.com/@rhinestone/sdk/-/sdk-1.0.0-alpha.32.tgz#3a8794c52f8dd31693b052d0d8b9c574fd6454c5"
+  integrity sha512-a3JorspzbPhYadS8qLArD0bH8yMYsM6SAfcNyj6g3rRPTU7Raux2l5KcZiCyPjE4SQ/LqU+OykjjpsiXEez0Tg==
   dependencies:
+    "@rhinestone/shared-configs" "1.4.1"
     axios "^1.7.0"
     solady "^0.1.21"
+
+"@rhinestone/shared-configs@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@rhinestone/shared-configs/-/shared-configs-1.4.1.tgz#45f23e8f7de91db8580792dd745410f363fe79c4"
+  integrity sha512-AKzr9JocK+wsHvRdkoLwqDZ9TU781LiT6ACWk5kd6Y+aNV+HUUduTZpQa/ydd47M1byy2byAh8GUcY5K6f5nyw==
 
 "@rhinestone/shared-configs@^1.4.0":
   version "1.4.0"

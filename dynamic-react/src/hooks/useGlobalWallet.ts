@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { createRhinestoneAccount } from "@rhinestone/sdk";
+import { createRhinestoneAccount, walletClientToAccount } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
 import { useSSRSafeWallet } from "./useSSRSafeWallet";
 import { isServer } from "../utils/isServer";
@@ -199,16 +199,13 @@ export function useGlobalWallet() {
         );
       }
 
-      const walletClientWithAddress = {
-        ...walletClient,
-        address: address,
-      };
+      const accountWalletClient = walletClientToAccount(walletClient);
 
       // Use the connected wallet client
       const rhinestoneAccount = await createRhinestoneAccount({
         owners: {
           type: "ecdsa",
-          accounts: [walletClientWithAddress as any],
+          accounts: [accountWalletClient as any],
         },
         rhinestoneApiKey: apiKey,
       });
@@ -235,28 +232,50 @@ export function useGlobalWallet() {
   }, [isHydrated, isConnected, address, walletClient]);
 
   const sendCrossChainTransaction = useCallback(
-    async (
-      sourceChains: any[],
-      targetChain: any,
-      calls: any[],
-      tokenRequests: any[]
-    ) => {
+    async (transactionParams: {
+      sourceChains?: any[];
+      targetChain: any;
+      calls: any[];
+      tokenRequests: any[];
+    }) => {
       if (!state.rhinestoneAccount) {
         throw new Error("Rhinestone account not initialized");
       }
 
       try {
-        const transaction = await state.rhinestoneAccount.sendTransaction({
-          sourceChains,
-          targetChain,
-          calls,
-          tokenRequests,
-        });
+        console.log("Starting cross-chain transaction with params:", transactionParams);
 
-        // Wait for execution
-        const result = await state.rhinestoneAccount.waitForExecution(
-          transaction
-        );
+        // Check if account is deployed on source chains (for logging only)
+        const sourceChains = transactionParams.sourceChains || [];
+        for (const chain of sourceChains) {
+          const deployed = await state.rhinestoneAccount.isDeployed(chain);
+          console.log(`Account deployed on ${chain.name} (${chain.id}):`, deployed);
+          
+          if (!deployed) {
+            console.log(`Account not deployed on ${chain.name}. The SDK will handle deployment during the transaction.`);
+            console.log(`Note: Account deployment requires ~0.002 ETH for gas fees.`);
+          }
+        }
+
+        // Use the exact same flow as the working backend
+        console.log("Preparing transaction...");
+        const preparedTransaction = await state.rhinestoneAccount.prepareTransaction({
+          sourceChains: transactionParams.sourceChains?.length ? transactionParams.sourceChains : undefined,
+          targetChain: transactionParams.targetChain,
+          calls: transactionParams.calls,
+          tokenRequests: transactionParams.tokenRequests,
+        });
+        console.log("Prepared transaction:", preparedTransaction);
+
+        console.log("Signing transaction...");
+        const signedTransaction = await state.rhinestoneAccount.signTransaction(preparedTransaction);
+        console.log("Signed transaction:", signedTransaction);
+
+        console.log("Submitting transaction...");
+        const transaction = await state.rhinestoneAccount.submitTransaction(signedTransaction);
+
+        console.log("Waiting for execution...");
+        const result = await state.rhinestoneAccount.waitForExecution(transaction);
 
         // Extract transaction hash if available
         let fillTransactionHash = null;
@@ -278,6 +297,12 @@ export function useGlobalWallet() {
         };
       } catch (error) {
         console.error("Cross-chain transaction failed:", error);
+        
+        // Provide helpful error message for insufficient balance
+        if (error instanceof Error && error.message.includes("Insufficient balance")) {
+          throw new Error("Insufficient balance for transaction. You need ETH for gas fees (~0.002 ETH for account deployment). Please add ETH to your account and try again.");
+        }
+        
         throw error;
       }
     },

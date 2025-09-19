@@ -13,7 +13,7 @@
     "@dynamic-labs/ethereum": "^4.27.0",
     "@dynamic-labs/sdk-react-core": "^4.27.0",
     "@dynamic-labs/wagmi-connector": "^4.27.0",
-    "@rhinestone/sdk": "^1.0.0-alpha.17",
+    "@rhinestone/sdk": "^1.0.0-alpha.32",
     "@rhinestone/shared-configs": "^1.4.0",
     "@tailwindcss/vite": "^4.1.12",
     "@tanstack/react-query": "^5.0.0",
