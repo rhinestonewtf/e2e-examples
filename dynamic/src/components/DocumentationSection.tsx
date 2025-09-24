@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 export function DocumentationSection() {
   return (
@@ -34,10 +34,15 @@ export function DocumentationSection() {
                 2. Create a Global Wallet
               </h4>
               <div className="bg-slate-900 text-slate-100 p-3 rounded-lg text-sm font-mono">
-                {`const account = await createRhinestoneAccount({
-  owners: { type: "ecdsa", accounts: [owner] },
-  rhinestoneApiKey: "your-api-key"
-})`}
+                {`const rhinestone = new RhinestoneSDK({
+  apiKey: "your-api-key",
+});
+const rhinestoneAccount = await rhinestone.createAccount({
+  owners: {
+    type: "ecdsa",
+    accounts: [walletClient], // Dynamic wallet client
+  },
+});`}
               </div>
             </div>
 

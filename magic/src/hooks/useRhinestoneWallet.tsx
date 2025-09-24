@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useMagic } from "./MagicProvider";
 import {
-  createRhinestoneAccount,
+  RhinestoneSDK,
   walletClientToAccount,
 } from "@rhinestone/sdk";
 import { formatUnits, createWalletClient, custom } from "viem";
@@ -224,12 +224,14 @@ export function useRhinestoneWallet() {
       const wrappedWalletClient = walletClientToAccount(walletClient);
 
       // use the wallet client (from Dynamic) to create a Rhinestone account
-      const account = await createRhinestoneAccount({
+      const rhinestone = new RhinestoneSDK({
+        apiKey,
+      });
+      const account = await rhinestone.createAccount({
         owners: {
           type: "ecdsa",
           accounts: [wrappedWalletClient],
         },
-        rhinestoneApiKey: apiKey,
       });
 
       const accountAddress = account.getAddress();

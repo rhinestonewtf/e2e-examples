@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useWalletClient } from "wagmi";
 import {
-  createRhinestoneAccount,
+  RhinestoneSDK,
   walletClientToAccount,
 } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
@@ -227,12 +227,14 @@ export function useGlobalWallet() {
       const wrappedWalletClient = walletClientToAccount(walletClient);
 
       // use the wallet client (from Dynamic) to create a Rhinestone account
-      const rhinestoneAccount = await createRhinestoneAccount({
+      const rhinestone = new RhinestoneSDK({
+        apiKey,
+      });
+      const rhinestoneAccount = await rhinestone.createAccount({
         owners: {
           type: "ecdsa",
           accounts: [wrappedWalletClient],
         },
-        rhinestoneApiKey: apiKey,
       });
 
       const accountAddress = rhinestoneAccount.getAddress();
