@@ -34,9 +34,11 @@ export function DocumentationSection() {
                 2. Create a Global Wallet
               </h4>
               <div className="bg-slate-900 text-slate-100 p-3 rounded-lg text-sm font-mono">
-                {`const account = await createRhinestoneAccount({
+                {`const rhinestone = new RhinestoneSDK({
+  apiKey: "your-api-key",
+});
+const account = await rhinestone.createAccount({
   owners: { type: "ecdsa", accounts: [owner] },
-  rhinestoneApiKey: "your-api-key"
 })`}
               </div>
             </div>

@@ -95,12 +95,14 @@ This example demonstrates the core pattern for integrating Dynamic with Rhinesto
 ```tsx
 // Key hook implementation
 const walletClient = await primaryWallet.getWalletClient();
-const rhinestoneAccount = await createRhinestoneAccount({
+const rhinestone = new RhinestoneSDK({
+  apiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY,
+});
+const rhinestoneAccount = await rhinestone.createAccount({
   owners: {
     type: "ecdsa",
     accounts: [walletClient], // Dynamic wallet client
   },
-  rhinestoneApiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY,
 });
 ```
 

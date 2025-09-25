@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { isEthereumWallet } from "@dynamic-labs/ethereum";
 import {
-  createRhinestoneAccount,
+  RhinestoneSDK,
   walletClientToAccount,
 } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
@@ -260,7 +260,10 @@ export function useGlobalWallet() {
         const wrappedWalletClient = walletClientToAccount(walletClient);
 
         // use the wallet client (from Dynamic) to create a Rhinestone account
-        const account = await createRhinestoneAccount({
+        const rhinestone = new RhinestoneSDK({
+          apiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
+        });
+        const account = await rhinestone.createAccount({
           owners: {
             type: "ecdsa",
             accounts: [wrappedWalletClient],
