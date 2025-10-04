@@ -1,45 +1,49 @@
 export enum Network {
-  POLYGON_AMOY = 'polygon-amoy',
-  POLYGON = 'polygon',
-  ETHEREUM_SEPOLIA = 'ethereum-sepolia',
-  ETHEREUM = 'ethereum',
-  ARBITRUM = 'arbitrum',
-  BASE = 'base',
-  ETHERLINK = 'etherlink',
-  ETHERLINK_TESTNET = 'etherlink-testnet',
-  ZKSYNC = 'zksync',
-  ZKSYNC_SEPOLIA = 'zksync-sepolia',
+  POLYGON_AMOY = "polygon-amoy",
+  POLYGON = "polygon",
+  ETHEREUM_SEPOLIA = "ethereum-sepolia",
+  ETHEREUM = "ethereum",
+  ARBITRUM = "arbitrum",
+  BASE = "base",
+  ETHERLINK = "etherlink",
+  ETHERLINK_TESTNET = "etherlink-testnet",
+  ZKSYNC = "zksync",
+  ZKSYNC_SEPOLIA = "zksync-sepolia",
 }
 
 export const getNetworkUrl = () => {
-  switch (process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK) {
+  const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK;
+
+  switch (network) {
     case Network.POLYGON:
-      return 'https://polygon-rpc.com/';
+      return "https://polygon-rpc.com/";
     case Network.POLYGON_AMOY:
-      return 'https://rpc-amoy.polygon.technology/';
+      return "https://rpc-amoy.polygon.technology/";
     case Network.ETHEREUM_SEPOLIA:
-      return 'https://eth-sepolia.g.alchemy.com/v2/jFhSITUli6T64wkYjl6B89O1S4p9xUmw';
+      return "https://eth-sepolia.g.alchemy.com/v2/jFhSITUli6T64wkYjl6B89O1S4p9xUmw";
     case Network.ETHEREUM:
-      return 'https://eth-mainnet.g.alchemy.com/v2/jFhSITUli6T64wkYjl6B89O1S4p9xUmw';
+      return "https://eth-mainnet.g.alchemy.com/v2/jFhSITUli6T64wkYjl6B89O1S4p9xUmw";
     case Network.ARBITRUM:
-      return 'https://arb1.arbitrum.io/rpc';
+      return "https://arb1.arbitrum.io/rpc";
     case Network.BASE:
-      return 'https://mainnet.base.org';
+      return "https://mainnet.base.org";
     case Network.ETHERLINK:
-      return 'https://node.mainnet.etherlink.com';
+      return "https://node.mainnet.etherlink.com";
     case Network.ETHERLINK_TESTNET:
-      return 'https://node.ghostnet.etherlink.com';
+      return "https://node.ghostnet.etherlink.com";
     case Network.ZKSYNC:
-      return 'https://mainnet.era.zksync.io';
+      return "https://mainnet.era.zksync.io";
     case Network.ZKSYNC_SEPOLIA:
-      return 'https://zksync-era-sepolia.blockpi.network/v1/rpc/public';
+      return "https://zksync-era-sepolia.blockpi.network/v1/rpc/public";
     default:
-      throw new Error('Network not supported');
+      return "https://mainnet.base.org";
   }
 };
 
 export const getChainId = () => {
-  switch (process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK) {
+  const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK;
+
+  switch (network) {
     case Network.POLYGON:
       return 137;
     case Network.POLYGON_AMOY:
@@ -60,67 +64,81 @@ export const getChainId = () => {
       return 42793;
     case Network.ETHERLINK_TESTNET:
       return 128123;
+    default:
+      return 8453; // Default to Base
   }
 };
 
 export const getNetworkToken = () => {
-  switch (process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK) {
+  const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK;
+
+  switch (network) {
     case Network.POLYGON_AMOY:
     case Network.POLYGON:
-      return 'MATIC';
+      return "MATIC";
     case Network.ETHEREUM:
     case Network.ETHEREUM_SEPOLIA:
     case Network.ARBITRUM:
     case Network.BASE:
     case Network.ZKSYNC:
     case Network.ZKSYNC_SEPOLIA:
-      return 'ETH';
+      return "ETH";
     case Network.ETHERLINK:
     case Network.ETHERLINK_TESTNET:
-      return 'XTZ';
+      return "XTZ";
+    default:
+      return "ETH";
   }
 };
 
 export const getFaucetUrl = () => {
-  switch (process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK) {
+  const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK;
+  switch (network) {
     case Network.POLYGON_AMOY:
-      return 'https://faucet.polygon.technology/';
+      return "https://faucet.polygon.technology/";
     case Network.ETHEREUM_SEPOLIA:
-      return 'https://sepoliafaucet.com/';
+      return "https://sepoliafaucet.com/";
     case Network.ETHERLINK_TESTNET:
-      return 'https://faucet.etherlink.com/';
+      return "https://faucet.etherlink.com/";
     case Network.ZKSYNC_SEPOLIA:
-      return 'https://faucet.quicknode.com/ethereum/sepolia';
+      return "https://faucet.quicknode.com/ethereum/sepolia";
+    default:
+      return undefined;
   }
 };
 
 export const getNetworkName = () => {
-  switch (process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK) {
+  const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK;
+  switch (network) {
     case Network.POLYGON:
-      return 'Polygon (Mainnet)';
+      return "Polygon (Mainnet)";
     case Network.POLYGON_AMOY:
-      return 'Polygon (Amoy)';
+      return "Polygon (Amoy)";
     case Network.ETHEREUM_SEPOLIA:
-      return 'Ethereum (Sepolia)';
+      return "Ethereum (Sepolia)";
     case Network.ETHEREUM:
-      return 'Ethereum (Mainnet)';
+      return "Ethereum (Mainnet)";
     case Network.ARBITRUM:
-      return 'Arbitrum';
+      return "Arbitrum";
     case Network.BASE:
-      return 'Base';
+      return "Base";
     case Network.ETHERLINK:
-      return 'Etherlink (Mainnet)';
+      return "Etherlink (Mainnet)";
     case Network.ETHERLINK_TESTNET:
-      return 'Etherlink (Testnet)';
+      return "Etherlink (Testnet)";
     case Network.ZKSYNC:
-      return 'zkSync (Mainnet)';
+      return "zkSync (Mainnet)";
     case Network.ZKSYNC_SEPOLIA:
-      return 'zkSync (Sepolia)';
+      return "zkSync (Sepolia)";
+    default:
+      return "Base";
   }
 };
 
 export const getBlockExplorer = (address: string) => {
-  switch (process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK) {
+  const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK;
+
+  switch (network) {
     case Network.POLYGON:
       return `https://polygonscan.com/address/${address}`;
     case Network.POLYGON_AMOY:
@@ -141,11 +159,14 @@ export const getBlockExplorer = (address: string) => {
       return `https://explorer.zksync.io/address/${address}`;
     case Network.ZKSYNC_SEPOLIA:
       return `https://sepolia.explorer.zksync.io/address/${address}`;
+    default:
+      return `https://basescan.org/address/${address}`;
   }
 };
 
 export const isEip1559Supported = () => {
-  switch (process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK) {
+  const network = process.env.NEXT_PUBLIC_BLOCKCHAIN_NETWORK;
+  switch (network) {
     case Network.ETHEREUM_SEPOLIA:
     case Network.ETHEREUM:
     case Network.ARBITRUM:
@@ -158,5 +179,7 @@ export const isEip1559Supported = () => {
     case Network.ETHERLINK:
     case Network.ETHERLINK_TESTNET:
       return false;
+    default:
+      return true;
   }
 };

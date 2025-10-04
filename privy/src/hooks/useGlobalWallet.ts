@@ -3,10 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useWalletClient } from "wagmi";
-import {
-  RhinestoneSDK,
-  walletClientToAccount,
-} from "@rhinestone/sdk";
+import { RhinestoneSDK, walletClientToAccount } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
 
 export interface TokenBalance {

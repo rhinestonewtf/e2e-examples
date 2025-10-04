@@ -21,7 +21,7 @@ function ContextProvider({
   return (
     <DynamicContextProvider
       settings={{
-        environmentId: "4bfce723-e806-412d-ac9b-3e5c22178689",
+        environmentId: "f6ac2908-10ed-4d7e-b467-a446db13e28a",
         walletConnectors: [EthereumWalletConnectors],
         overrides: {
           evmNetworks,

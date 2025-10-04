@@ -3,10 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { isEthereumWallet } from "@dynamic-labs/ethereum";
-import {
-  RhinestoneSDK,
-  walletClientToAccount,
-} from "@rhinestone/sdk";
+import { RhinestoneSDK, walletClientToAccount } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
 
 export interface TokenBalance {
@@ -262,21 +259,23 @@ export function useGlobalWallet() {
         // use the wallet client (from Dynamic) to create a Rhinestone account
         const rhinestone = new RhinestoneSDK({
           apiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
+          // endpointUrl: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
         });
         const account = await rhinestone.createAccount({
           owners: {
-            type: "ecdsa",
+            type: "ecdsa" as const,
             accounts: [wrappedWalletClient],
           },
-          rhinestoneApiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
         });
+
+        const accountAddress = account.getAddress();
 
         if (isMounted && account) {
           console.log("Rhinestone account created:", account);
           setState((prev) => ({
             ...prev,
             rhinestoneAccount: account,
-            accountAddress: walletAddress,
+            accountAddress: accountAddress,
             isLoading: false,
           }));
 

@@ -2,10 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAccount, useWalletClient } from "wagmi";
-import {
-  RhinestoneSDK,
-  walletClientToAccount,
-} from "@rhinestone/sdk";
+import { RhinestoneSDK, walletClientToAccount } from "@rhinestone/sdk";
 import { formatUnits } from "viem";
 
 export interface TokenBalance {
