@@ -4,25 +4,39 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port 3000",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint --max-warnings 0",
+    "dev": "remix vite:dev",
+    "build": "remix vite:build",
+    "start": "remix-serve ./build/server/index.js",
+    "lint": "eslint --max-warnings 0 app",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@dynamic-labs/ethereum": "^3.5.6",
+    "@dynamic-labs/sdk-react-core": "^3.5.6",
+    "@dynamic-labs/wagmi-connector": "^3.5.6",
+    "@remix-run/node": "2.15.2",
+    "@remix-run/react": "2.15.2",
+    "@remix-run/serve": "2.15.2",
     "@repo/ui": "workspace:*",
-    "next": "^15.5.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "@rhinestone/sdk": "1.0.0-beta.43",
+    "@tanstack/react-query": "^5.0.0",
+    "isbot": "^4.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "viem": "2.30.0",
+    "wagmi": "2.15.4"
   },
   "devDependencies": {
+    "@remix-run/dev": "2.15.2",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.1",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
     "eslint": "^9.34.0",
-    "typescript": "5.9.2"
+    "tsx": "4.19.0",
+    "typescript": "5.9.2",
+    "vite": "5.4.2",
+    "vite-tsconfig-paths": "^4.2.1"
   }
 }
