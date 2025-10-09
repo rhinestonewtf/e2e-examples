@@ -16,13 +16,13 @@ importers:
         version: 4.29.5(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react-native@0.74.0(@babel/core@7.28.3)(@babel/preset-env@7.28.3(@babel/core@7.28.3))(@types/react@19.1.12)(bufferutil@4.0.9)(react@19.1.0)(utf-8-validate@5.0.10))(react@19.1.0)
       '@dynamic-labs/wagmi-connector':
         specifier: ^4.25.10
-        version: 4.29.5(ryh67jqy4vz72dr76mhtpjlhni)
+        version: 4.29.5(7c11d37e5e4bfae7adb92ee9629cdce6)
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.1.12)(react@19.1.0)
       '@rhinestone/sdk':
-        specifier: 1.0.0-alpha.34
-        version: 1.0.0-alpha.34(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
+        specifier: 1.0.0-beta.43
+        version: 1.0.0-beta.43(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@tanstack/react-query':
         specifier: ^5.84.2
         version: 5.85.6(react@19.1.0)
@@ -1753,8 +1753,8 @@ packages:
   '@reown/appkit@1.7.8':
     resolution: {integrity: sha512-51kTleozhA618T1UvMghkhKfaPcc9JlKwLJ5uV+riHyvSoWPKPRIa5A6M1Wano5puNyW0s3fwywhyqTHSilkaA==}
 
-  '@rhinestone/sdk@1.0.0-alpha.34':
-    resolution: {integrity: sha512-qm136+JporjBEVOte/66BDF3I2r06ygr7wL+VwUeXniOZAmxQPeGlxtEitdPRqOdoGYTrbQ2M4yf5bEilR9Cdw==}
+  '@rhinestone/sdk@1.0.0-beta.43':
+    resolution: {integrity: sha512-psYp9R4g9z8prpRDfBDwC15i53NKNuUnM4z0qasVdxa0VUSKw+qdjr8kHVa9l85Tuj6ftJW803UtqpI5i8wYfw==}
     peerDependencies:
       viem: ^2.28.0
 
@@ -7209,7 +7209,7 @@ snapshots:
       - utf-8-validate
       - viem
 
-  '@dynamic-labs/wagmi-connector@4.29.5(ryh67jqy4vz72dr76mhtpjlhni)':
+  '@dynamic-labs/wagmi-connector@4.29.5(7c11d37e5e4bfae7adb92ee9629cdce6)':
     dependencies:
       '@dynamic-labs/assert-package-version': 4.29.5
       '@dynamic-labs/ethereum-core': 4.29.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
@@ -8561,14 +8561,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@rhinestone/sdk@1.0.0-alpha.34(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))':
+  '@rhinestone/sdk@1.0.0-beta.43(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
       '@rhinestone/shared-configs': 1.4.4(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
-      axios: 1.9.0
       solady: 0.1.26
       viem: 2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)
     transitivePeerDependencies:
-      - debug
       - typescript
 
   '@rhinestone/shared-configs@1.4.4(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))':
@@ -10972,7 +10970,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.41.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.34.0(jiti@2.5.1)))(eslint@9.34.0(jiti@2.5.1)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.41.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.34.0(jiti@2.5.1)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -10994,7 +10992,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.34.0(jiti@2.5.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.41.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.34.0(jiti@2.5.1)))(eslint@9.34.0(jiti@2.5.1))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.41.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.34.0(jiti@2.5.1))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3

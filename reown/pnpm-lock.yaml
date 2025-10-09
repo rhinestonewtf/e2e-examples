@@ -18,8 +18,8 @@ importers:
         specifier: ^1.7.18
         version: 1.8.1(@types/react@19.1.12)(@wagmi/core@2.20.1(@tanstack/query-core@5.85.5)(@types/react@19.1.12)(react@19.1.0)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4)))(bufferutil@4.0.9)(react@19.1.0)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.1.0))(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(wagmi@2.16.8(@tanstack/query-core@5.85.5)(@tanstack/react-query@5.85.5(react@19.1.0))(@types/react@19.1.12)(bufferutil@4.0.9)(react@19.1.0)(typescript@5.9.2)(utf-8-validate@5.0.10)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(zod@3.22.4)
       '@rhinestone/sdk':
-        specifier: ^1.0.0-beta.40
-        version: 1.0.0-beta.40(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
+        specifier: ^1.0.0-beta.43
+        version: 1.0.0(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@tanstack/react-query':
         specifier: ^5.84.2
         version: 5.85.5(react@19.1.0)
@@ -649,8 +649,8 @@ packages:
   '@reown/appkit@1.8.1':
     resolution: {integrity: sha512-6asyPS7uHWNgTlMH2P4IqQVZKSW9NGb7XNA+nMLpHV2dMmXn0D+tpY0j4477DC/ekNCFK2bieVk4WsYgyd6jHg==}
 
-  '@rhinestone/sdk@1.0.0-beta.40':
-    resolution: {integrity: sha512-OnkzW3Sz38xKdHkhCYFEQjsASt+7NBUo86qAdUQY5iTiHZrAryf8xu6U1Kp6stdwAMkBfIzVN5tYABBUJlobuA==}
+  '@rhinestone/sdk@1.0.0':
+    resolution: {integrity: sha512-LWwyiIfDM0q1nusCVBh0RsTIEXL/WXor9KED5brLt64TxOArWzbBmbZcc/NzTQz74xAKojczt0Vye5M1eO1qEg==}
     peerDependencies:
       viem: ^2.28.0
 
@@ -4325,7 +4325,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@rhinestone/sdk@1.0.0-beta.40(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))':
+  '@rhinestone/sdk@1.0.0(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
       '@rhinestone/shared-configs': 1.4.4(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.22.4))
       solady: 0.1.26

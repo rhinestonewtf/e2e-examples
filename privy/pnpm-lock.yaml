@@ -18,8 +18,8 @@ importers:
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.1.12)(react@19.1.0)
       '@rhinestone/sdk':
-        specifier: 1.0.0-beta.40
-        version: 1.0.0-beta.40(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))
+        specifier: 1.0.0-beta.43
+        version: 1.0.0-beta.43(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))
       '@tanstack/react-query':
         specifier: ^5.84.2
         version: 5.85.6(react@19.1.0)
@@ -866,8 +866,8 @@ packages:
   '@reown/appkit@1.8.1':
     resolution: {integrity: sha512-6asyPS7uHWNgTlMH2P4IqQVZKSW9NGb7XNA+nMLpHV2dMmXn0D+tpY0j4477DC/ekNCFK2bieVk4WsYgyd6jHg==}
 
-  '@rhinestone/sdk@1.0.0-beta.40':
-    resolution: {integrity: sha512-OnkzW3Sz38xKdHkhCYFEQjsASt+7NBUo86qAdUQY5iTiHZrAryf8xu6U1Kp6stdwAMkBfIzVN5tYABBUJlobuA==}
+  '@rhinestone/sdk@1.0.0-beta.43':
+    resolution: {integrity: sha512-psYp9R4g9z8prpRDfBDwC15i53NKNuUnM4z0qasVdxa0VUSKw+qdjr8kHVa9l85Tuj6ftJW803UtqpI5i8wYfw==}
     peerDependencies:
       viem: ^2.28.0
 
@@ -5384,7 +5384,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@rhinestone/sdk@1.0.0-beta.40(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))':
+  '@rhinestone/sdk@1.0.0-beta.43(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))':
     dependencies:
       '@rhinestone/shared-configs': 1.4.4(typescript@5.9.2)(viem@2.36.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))
       solady: 0.1.26
