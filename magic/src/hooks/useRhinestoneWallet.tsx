@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useMagic } from "./MagicProvider";
-import {
-  RhinestoneSDK,
-  walletClientToAccount,
-} from "@rhinestone/sdk";
+import { RhinestoneSDK, walletClientToAccount } from "@rhinestone/sdk";
 import { formatUnits, createWalletClient, custom } from "viem";
 
 export interface TokenBalance {
@@ -206,14 +203,6 @@ export function useRhinestoneWallet() {
         throw new Error("No Magic wallet address found");
       }
 
-      const apiKey = process.env.NEXT_PUBLIC_RHINESTONE_API_KEY;
-
-      if (!apiKey) {
-        throw new Error(
-          "Rhinestone API key not configured. Please set NEXT_PUBLIC_RHINESTONE_API_KEY"
-        );
-      }
-
       // Create a viem wallet client using Magic's provider
       const walletClient = createWalletClient({
         account: magicAddress as `0x${string}`,
@@ -223,9 +212,15 @@ export function useRhinestoneWallet() {
       // wrap the wagmi client for the sdk
       const wrappedWalletClient = walletClientToAccount(walletClient);
 
+      const baseUrl =
+        typeof window !== "undefined"
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
       // use the wallet client (from Dynamic) to create a Rhinestone account
       const rhinestone = new RhinestoneSDK({
-        apiKey,
+        apiKey: "proxy",
+        endpointUrl: `${baseUrl}/api/orchestrator`,
       });
       const account = await rhinestone.createAccount({
         owners: {

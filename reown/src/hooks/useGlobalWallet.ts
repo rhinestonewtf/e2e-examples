@@ -179,25 +179,23 @@ export function useGlobalWallet() {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      const apiKey = process.env.NEXT_PUBLIC_RHINESTONE_API_KEY;
-
-      if (!apiKey) {
-        throw new Error(
-          "Rhinestone API key not configured. Please set NEXT_PUBLIC_RHINESTONE_API_KEY"
-        );
-      }
-
       // wrap the wagmi client for the sdk
-      const account = walletClientToAccount(walletClient);
+      const wrappedWalletClient = walletClientToAccount(walletClient);
 
-      // use the wallet client (from Reown) to create a Rhinestone account
+      const baseUrl =
+        typeof window !== "undefined"
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
       const rhinestone = new RhinestoneSDK({
-        apiKey,
+        apiKey: "proxy",
+        endpointUrl: `${baseUrl}/api/orchestrator`,
       });
+
       const rhinestoneAccount = await rhinestone.createAccount({
         owners: {
-          type: "ecdsa",
-          accounts: [account],
+          type: "ecdsa" as const,
+          accounts: [wrappedWalletClient],
         },
       });
 

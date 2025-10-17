@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { useMagic } from '@/hooks/MagicProvider';
-import showToast from '@/utils/showToast';
-import Spinner from '../../ui/Spinner';
-import { RPCError, RPCErrorCode } from 'magic-sdk';
-import { LoginProps } from '@/utils/types';
-import { saveUserInfo } from '@/utils/common';
-import Card from '../../ui/Card';
-import CardHeader from '../../ui/CardHeader';
-import FormInput from '@/components/ui/FormInput';
+import { useState } from "react";
+import { useMagic } from "@/hooks/MagicProvider";
+import showToast from "@/utils/showToast";
+import Spinner from "../../ui/Spinner";
+import { RPCError, RPCErrorCode } from "magic-sdk";
+import { LoginProps } from "@/utils/types";
+import { saveUserInfo } from "@/utils/common";
+import Card from "../../ui/Card";
+import CardHeader from "../../ui/CardHeader";
+import FormInput from "@/components/ui/FormInput";
 
 const SMSOTP = ({ token, setToken }: LoginProps) => {
   const { magic } = useMagic();
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState(false);
   const [isLoginInProgress, setLoginInProgress] = useState(false);
 
@@ -29,26 +29,26 @@ const SMSOTP = ({ token, setToken }: LoginProps) => {
         const metadata = await magic?.user.getInfo();
 
         if (!token || !metadata?.publicAddress) {
-          throw new Error('Magic login failed');
+          throw new Error("Magic login failed");
         }
 
         setToken(token);
-        saveUserInfo(token, 'EMAIL', metadata?.publicAddress);
-        setPhone('');
+        saveUserInfo(token, "EMAIL", metadata?.publicAddress);
+        setPhone("");
       } catch (e) {
-        console.log('login error: ' + JSON.stringify(e));
+        console.log("login error: " + JSON.stringify(e));
         if (e instanceof RPCError) {
           switch (e.code) {
             case RPCErrorCode.MagicLinkFailedVerification:
             case RPCErrorCode.MagicLinkExpired:
             case RPCErrorCode.MagicLinkRateLimited:
             case RPCErrorCode.UserAlreadyLoggedIn:
-              showToast({ message: e.message, type: 'error' });
+              showToast({ message: e.message, type: "error" });
               break;
             default:
               showToast({
-                message: 'Something went wrong. Please try again',
-                type: 'error',
+                message: "Something went wrong. Please try again",
+                type: "error",
               });
           }
         }
@@ -67,7 +67,7 @@ const SMSOTP = ({ token, setToken }: LoginProps) => {
             if (phoneError) setPhoneError(false);
             setPhone(e.target.value);
           }}
-          placeholder={token.length > 0 ? 'Already logged in' : '+11234567890'}
+          placeholder={token.length > 0 ? "Already logged in" : "+11234567890"}
           value={phone}
         />
         {phoneError && (
@@ -77,10 +77,12 @@ const SMSOTP = ({ token, setToken }: LoginProps) => {
         )}
         <button
           className="login-button"
-          disabled={isLoginInProgress || (token.length > 0 ? false : phone.length == 0)}
+          disabled={
+            isLoginInProgress || (token.length > 0 ? false : phone.length == 0)
+          }
           onClick={() => handleLogin()}
         >
-          {isLoginInProgress ? <Spinner /> : 'Log in / Sign up'}
+          {isLoginInProgress ? <Spinner /> : "Log in / Sign up"}
         </button>
       </div>
     </Card>

@@ -1,4 +1,4 @@
-import { cookieStorage, createStorage, http } from "@wagmi/core";
+import { cookieStorage, createStorage, http } from "wagmi";
 import { createConfig } from "wagmi";
 import {
   mainnet,

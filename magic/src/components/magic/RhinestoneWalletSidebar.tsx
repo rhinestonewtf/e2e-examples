@@ -1,9 +1,9 @@
-import { useRhinestoneWallet } from "@/hooks/useRhinestoneWallet";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Copy, Check, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { getNetworkName } from "@/utils/network";
+import { useRhinestoneWallet } from '@/hooks/useRhinestoneWallet';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Copy, Check, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { getNetworkName } from '@/utils/network';
 
 export function RhinestoneWalletSidebar() {
   const { 
@@ -23,7 +23,7 @@ export function RhinestoneWalletSidebar() {
       setCopiedAddress(label);
       setTimeout(() => setCopiedAddress(null), 2000);
     } catch (err) {
-      console.error("Failed to copy text: ", err);
+      console.error('Failed to copy text: ', err);
     }
   };
 
@@ -88,10 +88,10 @@ export function RhinestoneWalletSidebar() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => copyToClipboard(magicAddress, "magic")}
+                onClick={() => copyToClipboard(magicAddress, 'magic')}
                 className="h-8 w-8 p-0"
               >
-                {copiedAddress === "magic" ? (
+                {copiedAddress === 'magic' ? (
                   <Check className="h-3 w-3 text-green-600" />
                 ) : (
                   <Copy className="h-3 w-3" />
@@ -114,10 +114,10 @@ export function RhinestoneWalletSidebar() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => copyToClipboard(accountAddress, "global")}
+                onClick={() => copyToClipboard(accountAddress, 'global')}
                 className="h-8 w-8 p-0"
               >
-                {copiedAddress === "global" ? (
+                {copiedAddress === 'global' ? (
                   <Check className="h-3 w-3 text-green-600" />
                 ) : (
                   <Copy className="h-3 w-3" />
@@ -154,7 +154,7 @@ export function RhinestoneWalletSidebar() {
                   </div>
                   <p className="text-xs text-slate-500 mt-2">
                     {token.chains.length} chain
-                    {token.chains.length !== 1 ? "s" : ""}
+                    {token.chains.length !== 1 ? 's' : ''}
                   </p>
                 </div>
               ))}

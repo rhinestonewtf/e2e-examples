@@ -37,17 +37,17 @@ const EmailOTP = ({ token, setToken }: LoginProps) => {
         console.log('login error: ' + JSON.stringify(e));
         if (e instanceof RPCError) {
           switch (e.code) {
-            case RPCErrorCode.MagicLinkFailedVerification:
-            case RPCErrorCode.MagicLinkExpired:
-            case RPCErrorCode.MagicLinkRateLimited:
-            case RPCErrorCode.UserAlreadyLoggedIn:
-              showToast({ message: e.message, type: 'error' });
-              break;
-            default:
-              showToast({
-                message: 'Something went wrong. Please try again',
-                type: 'error',
-              });
+          case RPCErrorCode.MagicLinkFailedVerification:
+          case RPCErrorCode.MagicLinkExpired:
+          case RPCErrorCode.MagicLinkRateLimited:
+          case RPCErrorCode.UserAlreadyLoggedIn:
+            showToast({ message: e.message, type: 'error' });
+            break;
+          default:
+            showToast({
+              message: 'Something went wrong. Please try again',
+              type: 'error',
+            });
           }
         }
       } finally {

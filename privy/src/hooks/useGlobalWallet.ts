@@ -212,24 +212,22 @@ export function useGlobalWallet() {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      const apiKey = process.env.NEXT_PUBLIC_RHINESTONE_API_KEY;
-
-      if (!apiKey) {
-        throw new Error(
-          "Rhinestone API key not configured. Please set NEXT_PUBLIC_RHINESTONE_API_KEY"
-        );
-      }
-
       // wrap the wagmi client for the sdk
       const wrappedWalletClient = walletClientToAccount(walletClient);
 
-      // use the wallet client (from Dynamic) to create a Rhinestone account
+      const baseUrl =
+        typeof window !== "undefined"
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
       const rhinestone = new RhinestoneSDK({
-        apiKey,
+        apiKey: "proxy",
+        endpointUrl: `${baseUrl}/api/orchestrator`,
       });
+
       const rhinestoneAccount = await rhinestone.createAccount({
         owners: {
-          type: "ecdsa",
+          type: "ecdsa" as const,
           accounts: [wrappedWalletClient],
         },
       });
@@ -267,11 +265,19 @@ export function useGlobalWallet() {
       }
 
       try {
+        console.log("sending transaction...");
+        console.log({
+          sourceChains,
+          targetChain,
+          calls,
+          tokenRequests,
+        });
         const transaction = await state.rhinestoneAccount.sendTransaction({
           sourceChains,
           targetChain,
           calls,
           tokenRequests,
+          sponsored: true,
         });
 
         // Wait for execution

@@ -1,43 +1,43 @@
-import { useState } from "react";
-import { useRhinestoneWallet } from "@/hooks/useRhinestoneWallet";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { useRhinestoneWallet } from '@/hooks/useRhinestoneWallet';
+import { Button } from '@/components/ui/button';
 // Remove Card import since we're using div with card class
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Send, Loader2 } from "lucide-react";
-import { encodeFunctionData, parseUnits } from "viem";
-import { arbitrum, base, sepolia } from "viem/chains";
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { ArrowRight, Send, Loader2 } from 'lucide-react';
+import { encodeFunctionData, parseUnits } from 'viem';
+import { arbitrum, base, sepolia } from 'viem/chains';
 
 // Example chains and USDC addresses for demo
 const DEMO_CHAINS = {
   arbitrum: {
     id: 42161,
-    name: "Arbitrum",
-    usdcAddress: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+    name: 'Arbitrum',
+    usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
   },
   base: {
     id: 8453,
-    name: "Base", 
-    usdcAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    name: 'Base', 
+    usdcAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
   },
   sepolia: {
     id: 11155111,
-    name: "Ethereum Sepolia",
-    usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // Example USDC on Sepolia
+    name: 'Ethereum Sepolia',
+    usdcAddress: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238', // Example USDC on Sepolia
   },
 };
 
 // Simple ERC20 ABI for transfer function
 const erc20Abi = [
   {
-    name: "transfer",
-    type: "function",
-    stateMutability: "nonpayable",
+    name: 'transfer',
+    type: 'function',
+    stateMutability: 'nonpayable',
     inputs: [
-      { name: "to", type: "address" },
-      { name: "amount", type: "uint256" },
+      { name: 'to', type: 'address' },
+      { name: 'amount', type: 'uint256' },
     ],
-    outputs: [{ name: "", type: "bool" }],
+    outputs: [{ name: '', type: 'bool' }],
   },
 ] as const;
 
@@ -55,11 +55,11 @@ export function RhinestoneCrossChainDemo() {
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [amount, setAmount] = useState("0.1");
-  const [recipient, setRecipient] = useState("");
+  const [amount, setAmount] = useState('0.1');
+  const [recipient, setRecipient] = useState('');
 
   // Find USDC token in portfolio
-  const usdcToken = portfolio.find((token) => token.symbol === "USDC");
+  const usdcToken = portfolio.find((token) => token.symbol === 'USDC');
   const arbitrumBalance = usdcToken?.chains.find(
     (chain) => chain.chainId === 42161
   );
@@ -70,7 +70,7 @@ export function RhinestoneCrossChainDemo() {
 
   const handleTransfer = async () => {
     if (!accountAddress || !recipient || !amount) {
-      setError("Please fill in all fields");
+      setError('Please fill in all fields');
       return;
     }
 
@@ -89,7 +89,7 @@ export function RhinestoneCrossChainDemo() {
           value: BigInt(0),
           data: encodeFunctionData({
             abi: erc20Abi,
-            functionName: "transfer",
+            functionName: 'transfer',
             args: [recipient as `0x${string}`, amountWei],
           }),
         },
@@ -117,21 +117,21 @@ export function RhinestoneCrossChainDemo() {
       // Set transaction hash if available
       if (transaction.fillTransactionHash) {
         setTransactionHash(transaction.fillTransactionHash);
-        setResult(`Transfer successful! View transaction on BaseScan`);
+        setResult('Transfer successful! View transaction on BaseScan');
       } else {
         setResult(
           `Transfer successful! Transaction ID: ${transaction.transaction.id}`
         );
       }
-      setAmount("");
-      setRecipient("");
+      setAmount('');
+      setRecipient('');
 
       // Refresh portfolio to show updated balances
       setTimeout(() => {
         refreshPortfolio();
       }, 2000);
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Transfer failed");
+      setError(error instanceof Error ? error.message : 'Transfer failed');
     } finally {
       setIsTransacting(false);
     }
@@ -298,26 +298,26 @@ export function RhinestoneCrossChainDemo() {
                 <AlertDescription>
                   {arbitrumBalance &&
                   parseFloat(arbitrumBalance.formattedLockedBalance) > 0 ? (
-                    <>
+                      <>
                       You have {arbitrumBalance.formattedLockedBalance} USDC
                       locked on Arbitrum, but need unlocked USDC to make
                       transfers.
-                      {parseFloat(arbitrumBalance.formattedUnlockedBalance) ===
+                        {parseFloat(arbitrumBalance.formattedUnlockedBalance) ===
                         0 &&
-                        " Send some additional USDC to your global wallet address: "}
-                      {parseFloat(arbitrumBalance.formattedUnlockedBalance) ===
+                        ' Send some additional USDC to your global wallet address: '}
+                        {parseFloat(arbitrumBalance.formattedUnlockedBalance) ===
                         0 &&
                         `${accountAddress.slice(0, 8)}...${accountAddress.slice(
                           -6
                         )}`}
-                    </>
-                  ) : (
-                    <>
+                      </>
+                    ) : (
+                      <>
                       You need unlocked USDC on Arbitrum to test cross-chain
-                      transfers. Send some USDC to your global wallet address:{" "}
-                      {accountAddress.slice(0, 8)}...{accountAddress.slice(-6)}
-                    </>
-                  )}
+                      transfers. Send some USDC to your global wallet address:{' '}
+                        {accountAddress.slice(0, 8)}...{accountAddress.slice(-6)}
+                      </>
+                    )}
                 </AlertDescription>
               </Alert>
             ) : (

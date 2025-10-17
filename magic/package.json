@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@magic-ext/oauth": "^23.0.3",
-    "@rhinestone/sdk": "1.0.0-alpha.34",
+    "@rhinestone/sdk": "1.0.7",
     "@types/node": "20.3.3",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",

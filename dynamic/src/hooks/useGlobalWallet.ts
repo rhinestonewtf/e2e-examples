@@ -256,11 +256,16 @@ export function useGlobalWallet() {
         // wrap the wagmi client for the sdk
         const wrappedWalletClient = walletClientToAccount(walletClient);
 
-        // use the wallet client (from Dynamic) to create a Rhinestone account
+        const baseUrl =
+          typeof window !== "undefined"
+            ? window.location.origin
+            : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
         const rhinestone = new RhinestoneSDK({
-          apiKey: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
-          // endpointUrl: process.env.NEXT_PUBLIC_RHINESTONE_API_KEY || "",
+          apiKey: "proxy",
+          endpointUrl: `${baseUrl}/api/orchestrator`,
         });
+
         const account = await rhinestone.createAccount({
           owners: {
             type: "ecdsa" as const,
@@ -279,13 +284,7 @@ export function useGlobalWallet() {
             isLoading: false,
           }));
 
-          // Fetch portfolio after account is set - but handle errors gracefully
-          try {
-            await fetchPortfolio(account);
-          } catch (portfolioError) {
-            console.warn("Failed to fetch initial portfolio:", portfolioError);
-            // Don't fail the whole initialization if portfolio fetch fails
-          }
+          await fetchPortfolio(account);
         }
       } catch (error) {
         console.error("Failed to create Rhinestone account:", error);
