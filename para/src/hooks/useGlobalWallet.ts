@@ -3,9 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useWallet, useClient } from "@getpara/react-sdk";
 import { useViemAccount } from "@getpara/react-sdk/evm/hooks";
-import { RhinestoneSDK } from "@rhinestone/sdk";
+import { RhinestoneSDK, wrapParaAccount } from "@rhinestone/sdk";
 import { formatUnits, type Account } from "viem";
-import { wrapParaAccountForRhinestone } from "@/lib/signature-utils";
 
 export interface TokenBalance {
   symbol: string;
@@ -201,13 +200,8 @@ export function useGlobalWallet() {
         endpointUrl: `${baseUrl}/api/orchestrator`,
       });
 
-      // Wrap Para viem account with custom signing for Rhinestone compatibility
-      // This adjusts signature v-byte from 0/1 (Para) to 27/28 (Rhinestone/AA)
       const walletId = wallet?.id;
-      const wrappedAccount = wrapParaAccountForRhinestone(
-        viemAccount,
-        walletId
-      );
+      const wrappedAccount = wrapParaAccount(viemAccount, walletId);
 
       console.log("Creating Rhinestone account with wrapped Para signer...", {
         walletId,
