@@ -8,5 +8,7 @@ This repository contains example implementations demonstrating Rhinestone's glob
 - **`privy/`** - Integration with Privy authentication and embedded wallets
 - **`reown/`** - Integration with Reown (formerly WalletConnect) AppKit
 - **`backend/`** - CLI bundle generator for testing Rhinestone Orchestrator intents
+- **`para-viem/`** - Integration with Para using para viem sdk
+- **`para-wagmi/`** - Integration with Para using para wagmi sdk
 
 Each frontend example is a complete Next.js application demonstrating cross-chain token management powered by the Rhinestone SDK. The backend provides a CLI tool for generating and testing transaction bundles.
