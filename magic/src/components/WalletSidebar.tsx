@@ -1,21 +1,27 @@
 import { useRhinestoneWallet } from '@/hooks/useRhinestoneWallet';
+import { useMagic } from '@/hooks/MagicProvider';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Check, Loader2 } from 'lucide-react';
+import { Copy, Check, Loader2, LogOut } from 'lucide-react';
 import { useState } from 'react';
-import { getNetworkName } from '@/utils/network';
 
-export function RhinestoneWalletSidebar() {
-  const { 
-    accountAddress, 
-    magicAddress, 
-    portfolio, 
-    isConnected, 
-    isLoading, 
+export function WalletSidebar() {
+  const { magic } = useMagic();
+  const {
+    accountAddress,
+    magicAddress,
+    portfolio,
+    isConnected,
+    isLoading,
     error,
-    logout 
+    logout,
+    reconnect,
   } = useRhinestoneWallet();
+
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const copyToClipboard = async (text: string, label: string) => {
     try {
@@ -27,10 +33,30 @@ export function RhinestoneWalletSidebar() {
     }
   };
 
-  if (isLoading) {
+  const handleLogin = async () => {
+    if (!email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+      setEmailError('Enter a valid email');
+      return;
+    }
+
+    try {
+      setIsLoggingIn(true);
+      setEmailError('');
+      await magic?.auth.loginWithEmailOTP({ email });
+      setEmail('');
+      reconnect();
+    } catch (e) {
+      console.error('Login error:', e);
+      setEmailError('Login failed. Please try again.');
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  if (isLoading && !isConnected) {
     return (
       <div className="p-6 h-full">
-        <h2 className="text-lg font-semibold text-slate-900 mb-6">Rhinestone Wallet</h2>
+        <h2 className="text-lg font-semibold text-slate-900 mb-6">Wallet</h2>
         <div className="flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-slate-400" />
@@ -44,11 +70,45 @@ export function RhinestoneWalletSidebar() {
   if (!isConnected) {
     return (
       <div className="p-6 h-full">
-        <h2 className="text-lg font-semibold text-slate-900 mb-6">Rhinestone Wallet</h2>
+        <h2 className="text-lg font-semibold text-slate-900 mb-6">Wallet</h2>
         <div className="space-y-4">
           <p className="text-sm text-slate-600">
-            Login with Magic to access your global wallet
+            Login with Magic to get started
           </p>
+          <div>
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => {
+                if (emailError) setEmailError('');
+                setEmail(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleLogin();
+              }}
+              className="w-full p-2 border border-slate-300 rounded-md text-sm"
+              disabled={isLoggingIn}
+            />
+            {emailError && (
+              <p className="text-xs text-red-500 mt-1">{emailError}</p>
+            )}
+          </div>
+          <Button
+            onClick={handleLogin}
+            disabled={isLoggingIn || !email}
+            className="w-full"
+            size="lg"
+          >
+            {isLoggingIn ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                Logging in...
+              </>
+            ) : (
+              'Login with Email'
+            )}
+          </Button>
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
               <p className="text-sm text-red-600">{error}</p>
@@ -61,7 +121,7 @@ export function RhinestoneWalletSidebar() {
 
   return (
     <div className="p-6 h-full">
-      <h2 className="text-lg font-semibold text-slate-900 mb-6">Rhinestone Wallet</h2>
+      <h2 className="text-lg font-semibold text-slate-900 mb-6">Wallet</h2>
 
       <div className="space-y-6">
         {/* Connection Status */}
@@ -73,7 +133,7 @@ export function RhinestoneWalletSidebar() {
             </span>
           </div>
           <Badge variant="outline" className="text-xs">
-            {getNetworkName()}
+            Base
           </Badge>
         </div>
 
@@ -132,7 +192,7 @@ export function RhinestoneWalletSidebar() {
         {portfolio.length > 0 && (
           <div>
             <p className="text-xs text-slate-500 mb-2">Portfolio</p>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
+            <div className="space-y-2">
               {portfolio.map((token, index) => (
                 <div key={index} className="bg-slate-100 p-3 rounded">
                   <div className="flex justify-between items-center mb-2">
@@ -162,23 +222,25 @@ export function RhinestoneWalletSidebar() {
           </div>
         )}
 
-        {portfolio.length === 0 && isConnected && (
+        {portfolio.length === 0 && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-blue-800 mb-2">🚀 Get Started</p>
+            <p className="text-sm text-blue-800 mb-2">Get Started</p>
             <p className="text-xs text-blue-600">
               Send some tokens to your global wallet address to see your portfolio and test cross-chain transactions.
             </p>
           </div>
         )}
 
-        {/* Actions */}
+        {/* Logout */}
         <div className="pt-4 border-t">
-          <Button 
-            onClick={logout} 
-            variant="outline" 
+          <Button
+            onClick={logout}
+            variant="outline"
             className="w-full"
+            size="lg"
           >
-            Logout from Magic
+            <LogOut className="h-4 w-4 mr-2" />
+            Disconnect
           </Button>
         </div>
       </div>

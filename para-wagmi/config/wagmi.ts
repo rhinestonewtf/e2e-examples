@@ -49,7 +49,7 @@ const connector = para ? paraConnector({
 // Create wagmi config
 export const wagmiConfig = createConfig({
   chains: chains as any,
-  connectors: connector ? [connector] : [],
+  connectors: connector ? [connector] as any : [],
   ssr: true,
   storage: createStorage({
     storage: cookieStorage,

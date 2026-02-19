@@ -13,7 +13,7 @@
     "@dynamic-labs/sdk-react-core": "^4.25.10",
     "@dynamic-labs/wagmi-connector": "^4.25.10",
     "@radix-ui/react-slot": "^1.2.3",
-    "@rhinestone/sdk": "1.0.7",
+    "@rhinestone/sdk": "^1.2.14",
     "@tanstack/react-query": "^5.84.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -22,7 +22,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "tailwind-merge": "^3.3.1",
-    "viem": "^2.33.3",
+    "viem": "^2.40.1",
     "wagmi": "^2.16.2"
   },
   "devDependencies": {
