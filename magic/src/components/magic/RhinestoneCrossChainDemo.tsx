@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Send, Loader2 } from 'lucide-react';
-import { encodeFunctionData, parseUnits } from 'viem';
-import { arbitrum, base, sepolia } from 'viem/chains';
+import { encodeFunctionData, erc20Abi, parseUnits } from 'viem';
+import { arbitrum, base } from 'viem/chains';
 
 // Example chains and USDC addresses for demo
 const DEMO_CHAINS = {
@@ -17,7 +17,7 @@ const DEMO_CHAINS = {
   },
   base: {
     id: 8453,
-    name: 'Base', 
+    name: 'Base',
     usdcAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
   },
   sepolia: {
@@ -26,20 +26,6 @@ const DEMO_CHAINS = {
     usdcAddress: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238', // Example USDC on Sepolia
   },
 };
-
-// Simple ERC20 ABI for transfer function
-const erc20Abi = [
-  {
-    name: 'transfer',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'to', type: 'address' },
-      { name: 'amount', type: 'uint256' },
-    ],
-    outputs: [{ name: '', type: 'bool' }],
-  },
-] as const;
 
 export function RhinestoneCrossChainDemo() {
   const {
@@ -61,7 +47,7 @@ export function RhinestoneCrossChainDemo() {
   // Find USDC token in portfolio
   const usdcToken = portfolio.find((token) => token.symbol === 'USDC');
   const arbitrumBalance = usdcToken?.chains.find(
-    (chain) => chain.chainId === 42161
+    (chain) => chain.chainId === 42161,
   );
 
   // Check if user has available (unlocked) USDC on Arbitrum
@@ -81,7 +67,7 @@ export function RhinestoneCrossChainDemo() {
 
     try {
       const amountWei = parseUnits(amount, 6); // USDC has 6 decimals
-      
+
       // Define the transfer call on Base
       const calls = [
         {
@@ -111,7 +97,7 @@ export function RhinestoneCrossChainDemo() {
         sourceChains,
         targetChain,
         calls,
-        tokenRequests
+        tokenRequests,
       );
 
       // Set transaction hash if available
@@ -120,7 +106,7 @@ export function RhinestoneCrossChainDemo() {
         setResult('Transfer successful! View transaction on BaseScan');
       } else {
         setResult(
-          `Transfer successful! Transaction ID: ${transaction.transaction.id}`
+          `Transfer successful! Transaction ID: ${transaction.transaction.id}`,
         );
       }
       setAmount('');
@@ -144,7 +130,9 @@ export function RhinestoneCrossChainDemo() {
           <h2 className="text-xl font-semibold text-slate-900 mb-2">
             Welcome to Rhinestone Global Wallet
           </h2>
-          <p className="text-slate-600">Login with Magic to access cross-chain features</p>
+          <p className="text-slate-600">
+            Login with Magic to access cross-chain features
+          </p>
         </div>
       </div>
     );
@@ -168,7 +156,8 @@ export function RhinestoneCrossChainDemo() {
           Cross-Chain Transfer Demo
         </h2>
         <p className="text-slate-600 mb-8">
-          Transfer tokens between chains using your Magic + Rhinestone global wallet
+          Transfer tokens between chains using your Magic + Rhinestone global
+          wallet
         </p>
 
         <div className="card bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
@@ -308,7 +297,7 @@ export function RhinestoneCrossChainDemo() {
                         {parseFloat(arbitrumBalance.formattedUnlockedBalance) ===
                         0 &&
                         `${accountAddress.slice(0, 8)}...${accountAddress.slice(
-                          -6
+                          -6,
                         )}`}
                       </>
                     ) : (
@@ -373,22 +362,24 @@ export function RhinestoneCrossChainDemo() {
             )}
 
             <div className="bg-blue-50 p-4 rounded-lg mt-6">
-              <h4 className="font-medium text-blue-900 mb-2">
-                How it works:
-              </h4>
+              <h4 className="font-medium text-blue-900 mb-2">How it works:</h4>
               <ol className="text-sm text-blue-800 space-y-1">
                 <li>
-                  1. Tokens on the source chain are used to sponsor an intent on the target chain
+                  1. Tokens on the source chain are used to sponsor an intent on
+                  the target chain
                 </li>
                 <li>
-                  2. Rhinestone creates the intent and user signs with Magic wallet
+                  2. Rhinestone creates the intent and user signs with Magic
+                  wallet
                 </li>
                 <li>
-                  3. Rhinestone Relayer Market supplies required tokens on the target chain and executes the transaction
+                  3. Rhinestone Relayer Market supplies required tokens on the
+                  target chain and executes the transaction
                 </li>
                 <li>4. Relayer is repaid on the source chain!</li>
                 <li>
-                  All in one atomic transaction for the user. No bridging required
+                  All in one atomic transaction for the user. No bridging
+                  required
                 </li>
               </ol>
             </div>

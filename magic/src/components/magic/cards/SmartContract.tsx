@@ -34,7 +34,7 @@ const SmartContract = () => {
 
         try {
           const value = await contract.methods.retrieve().call();
-          setValue(value);
+          setValue(Number(value));
         } catch (error) {
           console.error("Error retrieving value:", error);
         }
@@ -81,8 +81,8 @@ const SmartContract = () => {
           .store(Number(newValue))
           .send({
             from: accounts[0],
-            gasPrice: gasPrice,
-            gas: gasLimit,
+            gasPrice: gasPrice.toString(),
+            gas: gasLimit.toString(),
           })
           .on("transactionHash", (txHash) => {
             setHash(txHash);

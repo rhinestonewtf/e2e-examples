@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAccount, useWalletClient } from "wagmi";
-import { RhinestoneSDK } from "@rhinestone/sdk";
+import { RhinestoneSDK, walletClientToAccount, wrapParaAccount } from "@rhinestone/sdk";
 import { formatUnits, type Account } from "viem";
-import { walletClientToAccount, wrapParaAccount } from "@/lib/rhinestone-utils";
 
 export interface TokenBalance {
   symbol: string;

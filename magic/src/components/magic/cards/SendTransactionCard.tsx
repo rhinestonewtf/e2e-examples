@@ -6,7 +6,11 @@ import FormInput from '@/components/ui/FormInput';
 import ErrorText from '@/components/ui/ErrorText';
 import Card from '@/components/ui/Card';
 import CardHeader from '@/components/ui/CardHeader';
-import { getFaucetUrl, getNetworkToken, isEip1559Supported } from '@/utils/network';
+import {
+  getFaucetUrl,
+  getNetworkToken,
+  isEip1559Supported,
+} from '@/utils/network';
 import showToast from '@/utils/showToast';
 import Spacer from '@/components/ui/Spacer';
 import TransactionHistory from '@/components/ui/TransactionHistory';
@@ -47,8 +51,8 @@ const SendTransaction = () => {
 
     if (isEip1559Supported()) {
       const feeData = await web3.eth.calculateFeeData();
-      txnParams.maxFeePerGas = BigInt(feeData.maxFeePerGas);
-      txnParams.maxPriorityFeePerGas = BigInt(feeData.maxPriorityFeePerGas);
+      txnParams.maxFeePerGas = BigInt(feeData.maxFeePerGas!);
+      txnParams.maxPriorityFeePerGas = BigInt(feeData.maxPriorityFeePerGas!);
     } else {
       txnParams.gasPrice = await web3.eth.getGasPrice();
     }
@@ -76,7 +80,6 @@ const SendTransaction = () => {
           type: 'error',
         });
       });
-
   }, [web3, amount, publicAddress, toAddress]);
 
   return (
@@ -105,8 +108,13 @@ const SendTransaction = () => {
         onChange={(e: any) => setAmount(e.target.value)}
         placeholder={`Amount (${getNetworkToken()})`}
       />
-      {amountError ? <ErrorText className="error">Invalid amount</ErrorText> : null}
-      <FormButton onClick={sendTransaction} disabled={!toAddress || !amount || disabled}>
+      {amountError ? (
+        <ErrorText className="error">Invalid amount</ErrorText>
+      ) : null}
+      <FormButton
+        onClick={sendTransaction}
+        disabled={!toAddress || !amount || disabled}
+      >
         Send Transaction
       </FormButton>
 

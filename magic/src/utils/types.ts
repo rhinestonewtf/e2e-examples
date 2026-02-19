@@ -11,9 +11,9 @@ export type TxnParams = {
   value: string;
   maxFeePerGas?: bigint;
   maxPriorityFeePerGas?: bigint;
-  gasPrice?: string;
+  gasPrice?: string | bigint;
 };
 
 
 
-export type { Magic } from '../components/magic/MagicProvider'
+export type { Magic } from '../hooks/MagicProvider'
