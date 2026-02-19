@@ -1,9 +1,7 @@
-import { getChainId, getNetworkUrl } from '@/utils/network';
-import { OAuthExtension } from '@magic-ext/oauth';
 import { Magic as MagicBase } from 'magic-sdk';
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-export type Magic = MagicBase<OAuthExtension[]>;
+export type Magic = MagicBase;
 
 type MagicContextType = {
   magic: Magic | null;
@@ -22,10 +20,9 @@ const MagicProvider = ({ children }: { children: ReactNode }) => {
     if (process.env.NEXT_PUBLIC_MAGIC_API_KEY) {
       const magic = new MagicBase(process.env.NEXT_PUBLIC_MAGIC_API_KEY as string, {
         network: {
-          rpcUrl: getNetworkUrl(),
-          chainId: getChainId(),
+          rpcUrl: 'https://mainnet.base.org',
+          chainId: 8453,
         },
-        extensions: [new OAuthExtension()],
       });
 
       setMagic(magic);

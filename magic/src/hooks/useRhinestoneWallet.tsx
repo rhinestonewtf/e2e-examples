@@ -203,10 +203,24 @@ export function useRhinestoneWallet() {
         throw new Error("No Magic wallet address found");
       }
 
-      // Create a viem wallet client using Magic's provider
+      // Magic embedded wallets don't support wallet_switchEthereumChain.
+      // The Rhinestone SDK calls switchChain before signing, but Magic
+      // wallets only need to sign typed data which is chain-agnostic.
+      const magicProvider = {
+        request: async (args: { method: string; params?: any[] }) => {
+          if (
+            args.method === "wallet_switchEthereumChain" ||
+            args.method === "wallet_addEthereumChain"
+          ) {
+            return null;
+          }
+          return (magic.rpcProvider as any).request(args);
+        },
+      };
+
       const walletClient = createWalletClient({
         account: magicAddress as `0x${string}`,
-        transport: custom(magic.rpcProvider as any),
+        transport: custom(magicProvider),
       });
 
       // wrap the wagmi client for the sdk
