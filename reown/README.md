@@ -16,7 +16,7 @@ This demo showcases how users can deposit tokens on any supported chain and spen
 
 1. **Reown Project ID**: Get one from [Reown Dashboard](https://dashboard.reown.com)
 2. **Rhinestone API Key**: Contact Rhinestone team for access
-3. **Node.js**: Version 18 or higher
+3. **Node.js**: Version 22.13 or higher (required by the pinned pnpm)
 
 ### Installation
 

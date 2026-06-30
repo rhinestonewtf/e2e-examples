@@ -19,7 +19,7 @@ This is the Wagmi-connector counterpart to the `para-viem` example: here Para is
 
 1. **Para API Key**: Get one from [Para Dashboard](https://getpara.com)
 2. **Rhinestone API Key**: Contact the Rhinestone team for access
-3. **Node.js**: Version 18 or higher
+3. **Node.js**: Version 22.13 or higher (required by the pinned pnpm)
 
 ### Installation
 

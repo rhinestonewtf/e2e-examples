@@ -16,7 +16,7 @@ This demo showcases how to integrate Dynamic Labs wallet connection with Rhinest
 
 1. **Dynamic Environment ID**: Get one from [Dynamic Dashboard](https://app.dynamic.xyz)
 2. **Rhinestone API Key**: Contact Rhinestone team for access
-3. **Node.js**: Version 18 or higher
+3. **Node.js**: Version 22.13 or higher (required by the pinned pnpm)
 
 ### Installation
 
