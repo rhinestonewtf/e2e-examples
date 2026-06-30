@@ -35,7 +35,7 @@ export function DocumentationSection() {
               </h4>
               <div className="bg-slate-900 text-slate-100 p-3 rounded-lg text-sm font-mono">
                 {`const rhinestone = new RhinestoneSDK({
-  apiKey: "your-api-key",
+  auth: { mode: "apiKey", apiKey: "your-api-key" },
 });
 const rhinestoneAccount = await rhinestone.createAccount({
   owners: {
@@ -51,12 +51,14 @@ const rhinestoneAccount = await rhinestone.createAccount({
                 3. Execute Cross-Chain Transfer
               </h4>
               <div className="bg-slate-900 text-slate-100 p-3 rounded-lg text-sm font-mono">
-                {`await account.sendTransaction({
+                {`const prepared = await account.prepareTransaction({
   sourceChains: [arbitrum],
   targetChain: base,
   calls: [transferCall],
   tokenRequests: [usdcRequest]
-})`}
+})
+const signed = await account.signTransaction(prepared)
+await account.submitTransaction(signed)`}
               </div>
 
               <div className="flex gap-2">

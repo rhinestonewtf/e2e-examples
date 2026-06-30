@@ -43,7 +43,7 @@ Edit `.env.local` with your actual values:
 
 ```env
 NEXT_PUBLIC_PROJECT_ID=your_reown_project_id_here
-NEXT_PUBLIC_RHINESTONE_API_KEY=your_rhinestone_api_key_here
+RHINESTONE_API_KEY=your_rhinestone_api_key_here
 ```
 
 4. Run the development server:
@@ -68,7 +68,7 @@ npm run dev
 // User deposits 10 USDC to global wallet address on Arbitrum
 // Later, user wants to send 5 USDC to someone on Base
 
-const transaction = await rhinestoneAccount.sendTransaction({
+const prepared = await rhinestoneAccount.prepareTransaction({
   sourceChains: [arbitrum], // Look for tokens on Arbitrum
   targetChain: base, // Execute transaction on Base
   calls: [
@@ -76,6 +76,8 @@ const transaction = await rhinestoneAccount.sendTransaction({
   ],
   tokenRequests: [{ address: usdcOnBase, amount: 5000000n }],
 });
+const signed = await rhinestoneAccount.signTransaction(prepared);
+const transaction = await rhinestoneAccount.submitTransaction(signed);
 
 // Rhinestone automatically:
 // 1. Uses USDC from Arbitrum

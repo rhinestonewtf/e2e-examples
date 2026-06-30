@@ -1,32 +1,33 @@
 {
-  "name": "magic",
+  "name": "@rhinestone-examples/magic",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix"
+    "lint": "next lint --fix",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@rhinestone/sdk": "^1.2.14",
-    "@types/node": "20.3.3",
-    "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.6",
+    "@rhinestone/sdk": "catalog:",
     "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.542.0",
     "magic-sdk": "^29.0.2",
-    "next": "13.4.7",
+    "next": "catalog:",
     "postcss": "8.4.24",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "tailwindcss": "3.3.2",
-    "typescript": "^5.4.0",
-    "viem": "^2.40.1"
+    "viem": "catalog:"
   },
   "devDependencies": {
-    "eslint": "^8.45.0",
-    "eslint-config-next": "13.4.10"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-next": "catalog:",
+    "typescript": "catalog:"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "name": "rhinestone-e2e-examples",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.1.1",
+  "scripts": {
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "check:sdk": "node scripts/check-sdk-version.mjs"
+  }
+}

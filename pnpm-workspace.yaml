@@ -1,0 +1,42 @@
+packages:
+  - 'dynamic'
+  - 'privy'
+  - 'reown'
+  - 'para-viem'
+  - 'para-wagmi'
+  - 'magic'
+
+# Single source of truth for shared dependency versions. Every app references
+# these via `catalog:`, so the whole repo moves as one unit and can't drift.
+# Bumping the SDK across all examples = editing the one line below.
+catalog:
+  '@rhinestone/sdk': 2.0.0-beta.34
+  next: 15.4.6
+  react: 19.1.0
+  react-dom: 19.1.0
+  viem: ^2.40.1
+  wagmi: ^2.16.2
+  typescript: ^5
+  '@types/node': ^20
+  '@types/react': ^19
+  '@types/react-dom': ^19
+  eslint: ^9
+  eslint-config-next: 15.4.6
+  '@getpara/react-sdk': 2.32.1
+  '@getpara/viem-v2-integration': 2.32.1
+  '@getpara/wagmi-v2-integration': 2.32.1
+
+# Native postinstall build scripts are skipped — examples are typechecked, not
+# run, from CI, so we keep installs deterministic and script-free.
+allowBuilds:
+  '@reown/appkit': false
+  bigint-buffer: false
+  bufferutil: false
+  es5-ext: false
+  keccak: false
+  protobufjs: false
+  secp256k1: false
+  sharp: false
+  tiny-secp256k1: false
+  unrs-resolver: false
+  utf-8-validate: false
