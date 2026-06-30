@@ -5,6 +5,10 @@ packages:
   - 'para-viem'
   - 'para-wagmi'
   - 'magic'
+  - 'standalone-wagmi'
+  - 'standalone-viem'
+  - 'passkey'
+  - 'session-keys'
 
 # Single source of truth for shared dependency versions. Every app references
 # these via `catalog:`, so the whole repo moves as one unit and can't drift.
@@ -33,6 +37,7 @@ allowBuilds:
   bigint-buffer: false
   bufferutil: false
   es5-ext: false
+  esbuild: false
   keccak: false
   protobufjs: false
   secp256k1: false
