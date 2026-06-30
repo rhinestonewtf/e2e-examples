@@ -16,26 +16,27 @@ This demo showcases how users can deposit tokens on any supported chain and spen
 
 1. **Reown Project ID**: Get one from [Reown Dashboard](https://dashboard.reown.com)
 2. **Rhinestone API Key**: Contact Rhinestone team for access
-3. **Node.js**: Version 18 or higher
+3. **Node.js**: Version 22.13 or higher (required by the pinned pnpm)
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository and enter it:
 
 ```bash
-git clone <your-repo-url>
-cd global-wallet-demo
+git clone git@github.com:rhinestonewtf/e2e-examples.git
+cd e2e-examples
 ```
 
-2. Install dependencies:
+2. Install dependencies (this is a pnpm workspace, so install once from the root):
 
 ```bash
-npm install
+pnpm install
 ```
 
-3. Set up environment variables:
+3. Configure this app's environment:
 
 ```bash
+cd reown
 cp env.example .env.local
 ```
 
@@ -43,13 +44,13 @@ Edit `.env.local` with your actual values:
 
 ```env
 NEXT_PUBLIC_PROJECT_ID=your_reown_project_id_here
-NEXT_PUBLIC_RHINESTONE_API_KEY=your_rhinestone_api_key_here
+RHINESTONE_API_KEY=your_rhinestone_api_key_here
 ```
 
-4. Run the development server:
+4. Run the development server (from the `reown/` directory):
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -68,7 +69,7 @@ npm run dev
 // User deposits 10 USDC to global wallet address on Arbitrum
 // Later, user wants to send 5 USDC to someone on Base
 
-const transaction = await rhinestoneAccount.sendTransaction({
+const prepared = await rhinestoneAccount.prepareTransaction({
   sourceChains: [arbitrum], // Look for tokens on Arbitrum
   targetChain: base, // Execute transaction on Base
   calls: [
@@ -76,6 +77,8 @@ const transaction = await rhinestoneAccount.sendTransaction({
   ],
   tokenRequests: [{ address: usdcOnBase, amount: 5000000n }],
 });
+const signed = await rhinestoneAccount.signTransaction(prepared);
+const transaction = await rhinestoneAccount.submitTransaction(signed);
 
 // Rhinestone automatically:
 // 1. Uses USDC from Arbitrum

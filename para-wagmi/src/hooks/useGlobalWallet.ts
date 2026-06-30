@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAccount, useWalletClient } from "wagmi";
-import { RhinestoneSDK, walletClientToAccount, wrapParaAccount } from "@rhinestone/sdk";
+import { RhinestoneSDK } from "@rhinestone/sdk";
+import { walletClientToAccount, wrapParaAccount } from "@rhinestone/sdk/utils";
 import { formatUnits, type Account } from "viem";
 
 export interface TokenBalance {
@@ -191,7 +192,7 @@ export function useGlobalWallet() {
           : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
       const rhinestone = new RhinestoneSDK({
-        apiKey: "proxy",
+        auth: { mode: "apiKey", apiKey: "proxy" },
         endpointUrl: `${baseUrl}/api/orchestrator`,
       });
 
@@ -244,18 +245,19 @@ export function useGlobalWallet() {
       }
 
       try {
-        const transaction = await state.rhinestoneAccount.sendTransaction({
+        const account = state.rhinestoneAccount;
+        const prepared = await account.prepareTransaction({
           sourceChains,
           targetChain,
           calls,
           tokenRequests,
           sponsored: true,
         });
+        const signed = await account.signTransaction(prepared);
+        const transaction = await account.submitTransaction(signed);
 
         // Wait for execution
-        const result = await state.rhinestoneAccount.waitForExecution(
-          transaction
-        );
+        const result = await account.waitForExecution(transaction);
 
         // Extract transaction hash if available
         let fillTransactionHash = null;

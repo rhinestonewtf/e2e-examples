@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useMagic } from "./MagicProvider";
-import { RhinestoneSDK, walletClientToAccount } from "@rhinestone/sdk";
+import { RhinestoneSDK } from "@rhinestone/sdk";
+import { walletClientToAccount } from "@rhinestone/sdk/utils";
 import { formatUnits, createWalletClient, custom } from "viem";
 
 export interface TokenBalance {
@@ -233,7 +234,7 @@ export function useRhinestoneWallet() {
 
       // use the wallet client (from Dynamic) to create a Rhinestone account
       const rhinestone = new RhinestoneSDK({
-        apiKey: "proxy",
+        auth: { mode: "apiKey", apiKey: "proxy" },
         endpointUrl: `${baseUrl}/api/orchestrator`,
       });
       const account = await rhinestone.createAccount({
@@ -279,17 +280,18 @@ export function useRhinestoneWallet() {
       }
 
       try {
-        const transaction = await state.rhinestoneAccount.sendTransaction({
+        const account = state.rhinestoneAccount;
+        const prepared = await account.prepareTransaction({
           sourceChains,
           targetChain,
           calls,
           tokenRequests,
         });
+        const signed = await account.signTransaction(prepared);
+        const transaction = await account.submitTransaction(signed);
 
         // Wait for execution
-        const result = await state.rhinestoneAccount.waitForExecution(
-          transaction
-        );
+        const result = await account.waitForExecution(transaction);
 
         // Extract transaction hash if available
         let fillTransactionHash = null;
