@@ -1,10 +1,12 @@
 # Rhinestone Global Wallet Examples
 
-This repository contains example implementations demonstrating Rhinestone's global wallet functionality with different wallet connection providers. Each example showcases how users can deposit tokens on any supported chain and spend them seamlessly on any other supported chain using a single account address.
+This repository contains example implementations demonstrating Rhinestone's global wallet functionality. Each example showcases how users can deposit tokens on any supported chain and spend them seamlessly on any other supported chain using a single account address.
 
 All examples are built on **`@rhinestone/sdk` v2** and pinned to a single SDK version through a pnpm workspace, so the whole repo builds as one unit.
 
 ## Examples
+
+### Wallet connection providers
 
 - **`dynamic/`** - Integration with Dynamic wallet connection
 - **`privy/`** - Integration with Privy authentication and embedded wallets
@@ -12,9 +14,19 @@ All examples are built on **`@rhinestone/sdk` v2** and pinned to a single SDK ve
 - **`para-viem/`** - Integration with Para using the Para viem SDK
 - **`para-wagmi/`** - Integration with Para using the Para wagmi SDK
 - **`magic/`** - Integration with Magic authentication
+
+### Features & standalone integrations
+
+- **`passkey/`** - Passkey-only account (WebAuthn), no third-party auth provider
+- **`session-keys/`** - One-click UX: approve a scoped session once, then execute within its policy
+- **`standalone-wagmi/`** - Pure wagmi integration (injected connector), no auth provider
+- **`standalone-viem/`** - Pure viem integration as a runnable Node script, no auth provider or UI
+
+### Tooling
+
 - **`backend/`** - CLI bundle generator for testing Rhinestone Orchestrator intents (git submodule)
 
-Each frontend example is a complete Next.js application demonstrating cross-chain token management powered by the Rhinestone SDK. The backend provides a CLI tool for generating and testing transaction bundles.
+Each frontend example is a Next.js application; `standalone-viem` is a Node script. The backend provides a CLI tool for generating and testing transaction bundles.
 
 ## Setup
 
