@@ -21,22 +21,23 @@ This demo showcases how users can deposit tokens on any supported chain and spen
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository and enter it:
 
 ```bash
-git clone <your-repo-url>
-cd para
+git clone git@github.com:rhinestonewtf/e2e-examples.git
+cd e2e-examples
 ```
 
-2. Install dependencies:
+2. Install dependencies (this is a pnpm workspace, so install once from the root):
 
 ```bash
 pnpm install
 ```
 
-3. Set up environment variables:
+3. Configure this app's environment:
 
 ```bash
+cd para-viem
 cp env.example .env.local
 ```
 
@@ -50,10 +51,10 @@ NEXT_PUBLIC_PARA_API_KEY=""
 RHINESTONE_API_KEY=your_rhinestone_api_key_here
 ```
 
-4. Run the development server:
+4. Run the development server (from the `para-viem/` directory):
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.

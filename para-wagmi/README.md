@@ -23,15 +23,16 @@ This is the Wagmi-connector counterpart to the `para-viem` example: here Para is
 
 ### Installation
 
-1. Install dependencies (run from the repo root — this is a pnpm workspace):
+1. Install dependencies (this is a pnpm workspace, so install once from the repo root):
 
 ```bash
 pnpm install
 ```
 
-2. Set up environment variables:
+2. Configure this app's environment:
 
 ```bash
+cd para-wagmi
 cp env.example .env.local
 ```
 
@@ -46,11 +47,9 @@ NEXT_PUBLIC_PARA_API_KEY=""
 RHINESTONE_API_KEY=your_rhinestone_api_key_here
 ```
 
-3. Run the development server:
+3. Run the development server (from the `para-wagmi/` directory):
 
 ```bash
-pnpm --filter @rhinestone-examples/para-wagmi dev
-# or, from this directory:
 pnpm dev
 ```
 
