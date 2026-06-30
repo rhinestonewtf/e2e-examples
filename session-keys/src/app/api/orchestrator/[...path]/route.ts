@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 const ORCHESTRATOR_URL = "https://v1.orchestrator.rhinestone.dev";
 
-// This demo enables and uses a smart session, whose enable transaction targets
-// the smart-session emissary module (not just the token), so we don't gate
-// contracts here. Production apps can scope this to their own contracts.
-const ALLOW_ALL_CONTRACTS = true;
+// This is a public catch-all proxy that injects the server-side
+// RHINESTONE_API_KEY, so we scope which contracts it will relay to rather than
+// turning it into an open relay. This demo enables and uses a smart session,
+// so the allowlist covers the session enable target (the smart-session
+// emissary) and the transfer target (USDC). Scope this to your own contracts.
+const ALLOW_ALL_CONTRACTS = false;
 
-// Whitelisted contracts when allow all is disabled
+// Whitelisted contracts when allow all is disabled (lowercased for comparison)
 const WHITELISTED_CONTRACTS = new Set([
-  "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", // Base USDC
-  "0x4200000000000000000000000000000000000006", // Weth address
+  "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", // Base USDC (transfer target)
+  "0xad568b3f825a8d5ffc06dd3253526b64d810ae89", // SmartSessionEmissary (session enable target)
 ]);
 
 const getApiKey = () => {
