@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 const ORCHESTRATOR_URL = "https://v1.orchestrator.rhinestone.dev";
 
-// If dont need any validation, can set this to true
-const ALLOW_ALL_CONTRACTS = false;
+// This demo enables and uses a smart session, whose enable transaction targets
+// the smart-session emissary module (not just the token), so we don't gate
+// contracts here. Production apps can scope this to their own contracts.
+const ALLOW_ALL_CONTRACTS = true;
 
 // Whitelisted contracts when allow all is disabled
 const WHITELISTED_CONTRACTS = new Set([
