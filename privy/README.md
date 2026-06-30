@@ -28,10 +28,10 @@ git clone <your-repo-url>
 cd privy
 ```
 
-2. Install dependencies:
+2. Install dependencies (run from the repo root — this is a pnpm workspace):
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. Set up environment variables:
@@ -47,13 +47,16 @@ Edit `.env.local` with your actual values:
 NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id_here
 
 # Get your API key from Rhinestone for orchestrator
-NEXT_PUBLIC_RHINESTONE_API_KEY=your_rhinestone_api_key_here
+# Kept server-side (no NEXT_PUBLIC_ prefix); proxied through /api/orchestrator
+RHINESTONE_API_KEY=your_rhinestone_api_key_here
 ```
 
 4. Run the development server:
 
 ```bash
-npm run dev
+pnpm --filter @rhinestone-examples/privy dev
+# or, from this directory:
+pnpm dev
 ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -82,7 +85,7 @@ npm run dev
 // User deposits 10 USDC to global wallet address on Arbitrum
 // Later, user wants to send 5 USDC to someone on Base
 
-const transaction = await rhinestoneAccount.sendTransaction({
+const prepared = await rhinestoneAccount.prepareTransaction({
   sourceChains: [arbitrum], // Look for tokens on Arbitrum
   targetChain: base, // Execute transaction on Base
   calls: [
@@ -90,6 +93,8 @@ const transaction = await rhinestoneAccount.sendTransaction({
   ],
   tokenRequests: [{ address: usdcOnBase, amount: 5000000n }],
 });
+const signed = await rhinestoneAccount.signTransaction(prepared);
+const transaction = await rhinestoneAccount.submitTransaction(signed);
 
 // Rhinestone automatically:
 // 1. Uses USDC from Arbitrum

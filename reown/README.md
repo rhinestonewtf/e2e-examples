@@ -27,10 +27,10 @@ git clone <your-repo-url>
 cd global-wallet-demo
 ```
 
-2. Install dependencies:
+2. Install dependencies (run from the repo root — this is a pnpm workspace):
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. Set up environment variables:
@@ -49,7 +49,9 @@ RHINESTONE_API_KEY=your_rhinestone_api_key_here
 4. Run the development server:
 
 ```bash
-npm run dev
+pnpm --filter @rhinestone-examples/reown dev
+# or, from this directory:
+pnpm dev
 ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.

@@ -55,13 +55,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ### Getting Started
 
-First, run the development server:
+First, install from the repo root (`pnpm install` — this is a pnpm workspace), then run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm --filter @rhinestone-examples/magic dev
+# or, from this directory:
 pnpm dev
 ```
 

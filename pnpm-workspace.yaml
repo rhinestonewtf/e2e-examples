@@ -10,7 +10,7 @@ packages:
 # these via `catalog:`, so the whole repo moves as one unit and can't drift.
 # Bumping the SDK across all examples = editing the one line below.
 catalog:
-  '@rhinestone/sdk': 2.0.0-beta.34
+  '@rhinestone/sdk': 2.0.0-beta.35
   next: 15.4.6
   react: 19.1.0
   react-dom: 19.1.0
