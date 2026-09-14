@@ -1,6 +1,6 @@
-# Rhinestone Global Wallet Examples
+# Rhinestone SDK Examples
 
-This repository contains example implementations demonstrating Rhinestone's global wallet functionality. Each example showcases how users can deposit tokens on any supported chain and spend them seamlessly on any other supported chain using a single account address.
+Example apps for multichain wallets built with the Rhinestone SDK. Each example showcases how users can deposit tokens on any supported chain and spend them seamlessly on any other supported chain using a single account address.
 
 All examples are built on **`@rhinestone/sdk` v2** and pinned to a single SDK version through a pnpm workspace, so the whole repo builds as one unit.
 
